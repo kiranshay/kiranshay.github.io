@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kiran Shay | ML + Neuroscience @ Johns Hopkins</title>
+  <meta name="description" content="Portfolio of Kiran Shay, neuroscience and computer science student at Johns Hopkins University specializing in applied machine learning for biological systems.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a href="#main-content" class="skip-to-content">Skip to content</a>
+
+  <!-- Navigation -->
+  <nav class="nav" id="nav">
+    <div class="nav-container">
+      <a href="#" class="nav-logo">KS</a>
+      <ul class="nav-links">
+        <li><a href="#about" class="nav-link">About</a></li>
+        <li><a href="#projects" class="nav-link">Projects</a></li>
+        <li><a href="#skills" class="nav-link">Skills</a></li>
+        <li><a href="#contact" class="nav-link">Contact</a></li>
+      </ul>
+      <button class="nav-toggle" aria-label="Toggle menu">
+        <i data-lucide="menu"></i>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile Nav -->
+  <div class="mobile-nav" id="mobile-nav">
+    <ul class="mobile-nav-links">
+      <li><a href="#about" class="nav-link">About</a></li>
+      <li><a href="#projects" class="nav-link">Projects</a></li>
+      <li><a href="#skills" class="nav-link">Skills</a></li>
+      <li><a href="#contact" class="nav-link">Contact</a></li>
+    </ul>
+  </div>
+
+  <main id="main-content">
+    <!-- Hero Section -->
+    <section class="hero bg-neural-pattern">
+      <div class="container">
+        <div class="hero-content stagger-children">
+          <p class="hero-intro">Hi, I'm</p>
+          <h1 class="hero-title">Kiran Shay</h1>
+          <p class="hero-tagline">Teaching Machines to Understand Biology</p>
+          <p class="hero-description">
+            Neuroscience and Computer Science student at Johns Hopkins University.
+            I build machine learning systems that help us understand the brain and biological processes.
+          </p>
+          <div class="hero-cta">
+            <a href="#projects" class="btn btn-primary">
+              <i data-lucide="folder-open"></i>
+              View Projects
+            </a>
+            <a href="#contact" class="btn btn-secondary">
+              <i data-lucide="mail"></i>
+              Get in Touch
+            </a>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="neural-animation">
+            <div class="node node-1"></div>
+            <div class="node node-2"></div>
+            <div class="node node-3"></div>
+            <div class="node node-4"></div>
+            <div class="node node-5"></div>
+            <svg class="connections" viewBox="0 0 300 300">
+              <line class="connection" x1="50" y1="100" x2="150" y2="50"/>
+              <line class="connection" x1="150" y1="50" x2="250" y2="100"/>
+              <line class="connection" x1="50" y1="100" x2="100" y2="200"/>
+              <line class="connection" x1="150" y1="50" x2="150" y2="150"/>
+              <line class="connection" x1="250" y1="100" x2="200" y2="200"/>
+              <line class="connection" x1="100" y1="200" x2="150" y2="150"/>
+              <line class="connection" x1="150" y1="150" x2="200" y2="200"/>
+              <line class="connection" x1="100" y1="200" x2="200" y2="200"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="section" id="about">
+      <div class="container container-narrow">
+        <h2 class="section-title">About Me</h2>
+        <div class="about-content">
+          <p>
+            I'm a junior at <strong>Johns Hopkins University</strong> studying Computer Science and Neuroscience,
+            with minors in Applied Mathematics & Statistics and Business. I'm driven by a simple question:
+            how can we use computational tools to decode the complexity of living systems?
+          </p>
+          <p>
+            My work sits at the intersection of machine learning and biological systems. I'm currently
+            building <strong>TremorML</strong>, an ML pipeline that differentiates neurological tremor types
+            from wearable sensor data—exactly the kind of applied ML for healthcare I want to pursue.
+          </p>
+          <p>
+            I love stochastic modeling and optimization. My
+            <a href="https://lineupoptimization.com" target="_blank" class="link link-underline">baseball lineup optimizer</a>
+            uses Markov chains and Monte Carlo simulation to maximize expected runs, and won the
+            <strong>2025 JHU Design Day Digital Vanguard Award</strong>.
+          </p>
+          <p>
+            Beyond my own research, I contribute to <strong>Delineo</strong>, JHU's infectious disease simulation
+            engine, and co-founded <strong>Affordable Tutoring Solutions</strong> as CTO, building EdTech
+            infrastructure to serve underserved communities.
+          </p>
+          <p class="about-cta">
+            Currently seeking research opportunities and collaborations in applied ML for biological systems.
+            <a href="#contact" class="link link-underline">Let's build something meaningful together.</a>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section class="section section-alt" id="projects">
+      <div class="container">
+        <h2 class="section-title">Projects</h2>
+        <p class="section-subtitle">ML, simulation, and optimization for real-world problems</p>
+
+        <div class="project-filters">
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="ml">Machine Learning</button>
+          <button class="filter-btn" data-filter="neuro">Neuroscience</button>
+          <button class="filter-btn" data-filter="simulation">Simulation</button>
+        </div>
+
+        <div class="projects-grid">
+          <!-- Project: TremorML -->
+          <article class="card project-card card-featured" data-tags="ml neuro">
+            <div class="card-header">
+              <div class="project-icon">
+                <i data-lucide="activity"></i>
+              </div>
+              <span class="project-status status-in-progress">Active</span>
+            </div>
+            <h3 class="card-title">TremorML: Neurological Disorder Classification</h3>
+            <p class="card-description">
+              Advanced ML pipeline for differentiating tremor types (Parkinsonian vs. Essential Tremor)
+              from wearable time-series data. Using XGBoost, Random Forests, and deep neural networks
+              with dimensionality reduction and SMOTE for class balancing.
+            </p>
+            <div class="tag-group">
+              <span class="tag tag-primary">XGBoost</span>
+              <span class="tag tag-secondary">Time-Series</span>
+              <span class="tag tag-accent">Signal Processing</span>
+              <span class="tag tag-neutral">Healthcare</span>
+            </div>
+            <div class="card-footer">
+              <a href="#" class="btn btn-ghost btn-sm">
+                <i data-lucide="github"></i> Code
+              </a>
+            </div>
+          </article>
+
+          <!-- Project: Lineup Optimization -->
+          <article class="card project-card card-featured" data-tags="ml optimization">
+            <div class="card-header">
+              <div class="project-icon">
+                <i data-lucide="bar-chart-3"></i>
+              </div>
+              <span class="project-status status-live">Live</span>
+            </div>
+            <h3 class="card-title">Baseball Lineup Optimizer</h3>
+            <p class="card-description">
+              Probabilistic lineup optimization using Markov-style transitions and stochastic simulations.
+              Developed BRP (Baserunner-Dependent Net Run Production), a custom metric for expected run contribution.
+              <strong>2025 JHU Design Day Digital Vanguard Award winner.</strong>
+            </p>
+            <div class="tag-group">
+              <span class="tag tag-primary">Markov Chains</span>
+              <span class="tag tag-secondary">Monte Carlo</span>
+              <span class="tag tag-accent">Python</span>
+              <span class="tag tag-neutral">Full Stack</span>
+            </div>
+            <div class="card-footer">
+              <a href="https://lineupoptimization.com" target="_blank" rel="noopener" class="btn btn-ghost btn-sm">
+                <i data-lucide="external-link"></i> Live Site
+              </a>
+            </div>
+          </article>
+
+          <!-- Project: Delineo -->
+          <article class="card project-card" data-tags="ml simulation">
+            <div class="card-header">
+              <div class="project-icon">
+                <i data-lucide="network"></i>
+              </div>
+              <span class="project-status status-in-progress">Active</span>
+            </div>
+            <h3 class="card-title">Delineo: Infectious Disease Simulation</h3>
+            <p class="card-description">
+              Contributing to JHU's core simulation engine modeling stochastic disease spread across communities.
+              Optimizing NumPy-based pipelines and refining geographic modeling for improved accuracy.
+            </p>
+            <div class="tag-group">
+              <span class="tag tag-primary">Stochastic Modeling</span>
+              <span class="tag tag-secondary">NumPy</span>
+              <span class="tag tag-accent">Simulation</span>
+            </div>
+            <div class="card-footer">
+              <a href="#" class="btn btn-ghost btn-sm">
+                <i data-lucide="github"></i> Code
+              </a>
+            </div>
+          </article>
+
+          <!-- Project: Affordable Tutoring -->
+          <article class="card project-card" data-tags="optimization">
+            <div class="card-header">
+              <div class="project-icon">
+                <i data-lucide="graduation-cap"></i>
+              </div>
+              <span class="project-status status-in-progress">Active</span>
+            </div>
+            <h3 class="card-title">Affordable Tutoring Solutions</h3>
+            <p class="card-description">
+              Co-founded EdTech startup as CTO. Built full-stack web infrastructure with automated scheduling,
+              curriculum delivery, and performance tracking. Serving students from underserved communities.
+            </p>
+            <div class="tag-group">
+              <span class="tag tag-primary">Full Stack</span>
+              <span class="tag tag-secondary">EdTech</span>
+              <span class="tag tag-accent">Startup</span>
+            </div>
+            <div class="card-footer">
+              <a href="#" class="btn btn-ghost btn-sm">
+                <i data-lucide="external-link"></i> Details
+              </a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section class="section" id="skills">
+      <div class="container">
+        <h2 class="section-title">Skills & Technologies</h2>
+
+        <div class="skills-grid">
+          <div class="skill-category">
+            <h3 class="skill-category-title">
+              <i data-lucide="cpu"></i>
+              Machine Learning
+            </h3>
+            <div class="tag-group">
+              <span class="tag tag-primary">XGBoost</span>
+              <span class="tag tag-primary">Random Forests</span>
+              <span class="tag tag-primary">Deep Neural Networks</span>
+              <span class="tag tag-primary">Time-Series Classification</span>
+              <span class="tag tag-primary">Feature Selection</span>
+              <span class="tag tag-primary">SMOTE</span>
+            </div>
+          </div>
+
+          <div class="skill-category">
+            <h3 class="skill-category-title">
+              <i data-lucide="bar-chart-3"></i>
+              Quantitative Methods
+            </h3>
+            <div class="tag-group">
+              <span class="tag tag-secondary">Stochastic Modeling</span>
+              <span class="tag tag-secondary">Monte Carlo Simulation</span>
+              <span class="tag tag-secondary">Markov Chains</span>
+              <span class="tag tag-secondary">Game Theory</span>
+              <span class="tag tag-secondary">Optimization</span>
+              <span class="tag tag-secondary">Probability & Statistics</span>
+            </div>
+          </div>
+
+          <div class="skill-category">
+            <h3 class="skill-category-title">
+              <i data-lucide="code"></i>
+              Programming & Tools
+            </h3>
+            <div class="tag-group">
+              <span class="tag tag-accent">Python</span>
+              <span class="tag tag-accent">NumPy</span>
+              <span class="tag tag-accent">Pandas</span>
+              <span class="tag tag-accent">Scikit-learn</span>
+              <span class="tag tag-accent">Full Stack Dev</span>
+              <span class="tag tag-accent">Git</span>
+            </div>
+          </div>
+
+          <div class="skill-category">
+            <h3 class="skill-category-title">
+              <i data-lucide="brain"></i>
+              Domain Expertise
+            </h3>
+            <div class="tag-group">
+              <span class="tag tag-neutral">Neuroscience</span>
+              <span class="tag tag-neutral">Signal Processing</span>
+              <span class="tag tag-neutral">Sports Analytics</span>
+              <span class="tag tag-neutral">Disease Modeling</span>
+              <span class="tag tag-neutral">Linear Algebra</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="section section-alt" id="contact">
+      <div class="container container-narrow">
+        <h2 class="section-title">Let's Build Something Together</h2>
+        <div class="contact-content">
+          <p>
+            I'm currently looking for research opportunities, internships, and collaborations
+            at the intersection of machine learning and biological systems.
+          </p>
+          <p>
+            Whether you're a researcher working on computational neuroscience, a company
+            building ML tools for biology, or a fellow student interested in collaborating—
+            I'd love to hear from you.
+          </p>
+
+          <div class="contact-interests">
+            <h3>Particularly interested in:</h3>
+            <ul>
+              <li>Summer 2026 research internships in ML for biology/neuroscience</li>
+              <li>Collaborative projects in computational biology and healthcare ML</li>
+              <li>Research positions in stochastic modeling and disease simulation</li>
+            </ul>
+          </div>
+
+          <div class="contact-links">
+            <a href="mailto:kiranshay123@gmail.com" class="contact-link">
+              <i data-lucide="mail"></i>
+              <span>Email</span>
+            </a>
+            <a href="https://www.linkedin.com/in/kiran-shay/" target="_blank" rel="noopener" class="contact-link">
+              <i data-lucide="linkedin"></i>
+              <span>LinkedIn</span>
+            </a>
+            <a href="https://github.com/kiranshay" target="_blank" rel="noopener" class="contact-link">
+              <i data-lucide="github"></i>
+              <span>GitHub</span>
+            </a>
+            <a href="#" class="contact-link">
+              <i data-lucide="file-text"></i>
+              <span>Resume</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2025 Kiran Shay &middot; Johns Hopkins University</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
