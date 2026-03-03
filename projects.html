@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projects | Kiran Shay</title>
+  <meta name="description" content="ML, simulation, and optimization projects by Kiran Shay.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a href="#main-content" class="skip-to-content">Skip to content</a>
+
+  <!-- Navigation -->
+  <nav class="nav" id="nav">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">KS</a>
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="about.html" class="nav-link">About</a></li>
+        <li><a href="projects.html" class="nav-link active">Projects</a></li>
+        <li><a href="skills.html" class="nav-link">Skills</a></li>
+        <li><a href="contact.html" class="nav-link">Contact</a></li>
+      </ul>
+      <button class="nav-toggle" aria-label="Toggle menu">
+        <i data-lucide="menu"></i>
+      </button>
+    </div>
+  </nav>
+
+  <div class="mobile-nav" id="mobile-nav">
+    <ul class="mobile-nav-links">
+      <li><a href="index.html" class="nav-link">Home</a></li>
+      <li><a href="about.html" class="nav-link">About</a></li>
+      <li><a href="projects.html" class="nav-link active">Projects</a></li>
+      <li><a href="skills.html" class="nav-link">Skills</a></li>
+      <li><a href="contact.html" class="nav-link">Contact</a></li>
+    </ul>
+  </div>
+
+  <main id="main-content">
+    <section class="page-header">
+      <div class="container">
+        <h1 class="page-title">Projects</h1>
+        <p class="page-subtitle">ML, simulation, and optimization for real-world problems</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="project-filters">
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="ml">Machine Learning</button>
+          <button class="filter-btn" data-filter="neuro">Neuroscience</button>
+          <button class="filter-btn" data-filter="simulation">Simulation</button>
+        </div>
+
+        <div class="projects-grid">
+          <!-- Project: TremorML -->
+          <article class="card project-card card-featured" data-tags="ml neuro">
+            <div class="card-header">
+              <div class="project-icon">
+                <i data-lucide="activity"></i>
+              </div>
+              <span class="project-status status-in-progress">Active</span>
+            </div>
+            <h3 class="card-title">TremorML: Neurological Disorder Classification</h3>
+            <p class="card-description">
+              Advanced ML pipeline for differentiating tremor types (Parkinsonian vs. Essential Tremor)
+              from wearable time-series data. Using XGBoost, Random Forests, and deep neural networks
+              with dimensionality reduction and SMOTE for class balancing.
+            </p>
+            <div class="tag-group">
+              <span class="tag tag-primary">XGBoost</span>
+              <span class="tag tag-secondary">Time-Series</span>
+              <span class="tag tag-accent">Signal Processing</span>
+              <span class="tag tag-neutral">Healthcare</span>
+            </div>
+            <div class="card-footer">
+              <a href="https://github.com/kiranshay/Parkinsons-ET" target="_blank" class="btn btn-ghost btn-sm">
+                <i data-lucide="github"></i> Code
+              </a>
+            </div>
+          </article>
+
+          <!-- Project: Lineup Optimization -->
+          <article class="card project-card card-featured" data-tags="ml optimization">
+            <div class="card-header">
+              <div class="project-icon">
+                <i data-lucide="bar-chart-3"></i>
+              </div>
+              <span class="project-status status-live">Live</span>
+            </div>
+            <h3 class="card-title">Baseball Lineup Optimizer</h3>
+            <p class="card-description">
+              Probabilistic lineup optimization using Markov-style transitions and stochastic simulations.
+              Developed BRP (Baserunner-Dependent Net Run Production), a custom metric for expected run contribution.
+              <strong>2025 JHU Design Day Digital Vanguard Award winner.</strong>
+            </p>
+            <div class="tag-group">
+              <span class="tag tag-primary">Markov Chains</span>
+              <span class="tag tag-secondary">Monte Carlo</span>
+              <span class="tag tag-accent">Python</span>
+              <span class="tag tag-neutral">Full Stack</span>
+            </div>
+            <div class="card-footer">
+              <a href="https://lineupoptimization.com" target="_blank" rel="noopener" class="btn btn-ghost btn-sm">
+                <i data-lucide="external-link"></i> Live Site
+              </a>
+            </div>
+          </article>
+
+          <!-- Project: Delineo -->
+          <article class="card project-card" data-tags="ml simulation">
+            <div class="card-header">
+              <div class="project-icon">
+                <i data-lucide="network"></i>
+              </div>
+              <span class="project-status status-in-progress">Active</span>
+            </div>
+            <h3 class="card-title">Delineo: Infectious Disease Simulation</h3>
+            <p class="card-description">
+              Contributing to JHU's core simulation engine modeling stochastic disease spread across communities.
+              Optimizing NumPy-based pipelines and refining geographic modeling for improved accuracy.
+            </p>
+            <div class="tag-group">
+              <span class="tag tag-primary">Stochastic Modeling</span>
+              <span class="tag tag-secondary">NumPy</span>
+              <span class="tag tag-accent">Simulation</span>
+            </div>
+            <div class="card-footer">
+              <a href="https://covidmod.isi.jhu.edu/team" target="_blank" class="btn btn-ghost btn-sm">
+                <i data-lucide="external-link"></i> Website
+              </a>
+            </div>
+          </article>
+
+          <!-- Project: Affordable Tutoring -->
+          <article class="card project-card" data-tags="optimization">
+            <div class="card-header">
+              <div class="project-icon">
+                <i data-lucide="graduation-cap"></i>
+              </div>
+              <span class="project-status status-in-progress">Active</span>
+            </div>
+            <h3 class="card-title">Affordable Tutoring Solutions</h3>
+            <p class="card-description">
+              Co-founded EdTech startup as CTO. Built full-stack web infrastructure with automated scheduling,
+              curriculum delivery, and performance tracking. Serving students from underserved communities.
+            </p>
+            <div class="tag-group">
+              <span class="tag tag-primary">Full Stack</span>
+              <span class="tag tag-secondary">EdTech</span>
+              <span class="tag tag-accent">Startup</span>
+            </div>
+            <div class="card-footer">
+              <a href="https://www.affordabletutoringsolutions.org" target="_blank" class="btn btn-ghost btn-sm">
+                <i data-lucide="external-link"></i> Website
+              </a>
+            </div>
+          </article>
+
+          <!-- Project: Retinal Ganglion Cell Encoding Models -->
+          <article class="card project-card" data-tags="neuro">
+            <div class="card-header">
+              <div class="project-icon">
+                <i data-lucide="eye"></i>
+              </div>
+              <span class="project-status status-planned">Demo</span>
+            </div>
+            <h3 class="card-title">Retinal Ganglion Cell Encoding Models</h3>
+            <p class="card-description">
+              Build encoding models to predict how retinal neurons respond to visual stimuli and quantify visual information transmission.
+            </p>
+            <div class="tag-group">
+              <span class="tag tag-primary">Encoding Models</span>
+              <span class="tag tag-secondary">Information Theory</span>
+              <span class="tag tag-accent">Neuroscience</span>
+            </div>
+            <div class="card-footer">
+              <a href="https://github.com/kiranshay/retinal-encoding-models" target="_blank" rel="noopener" class="btn btn-ghost btn-sm">
+                <i data-lucide="github"></i> Code
+              </a>
+              <a href="https://retinal-encoding.streamlit.app" target="_blank" rel="noopener" class="btn btn-ghost btn-sm">
+                <i data-lucide="external-link"></i> Demo
+              </a>
+            </div>
+          </article>
+
+          <!-- Project: Neural Signal Classification -->
+          <article class="card project-card" data-tags="neuro ml">
+            <div class="card-header">
+              <div class="project-icon">
+                <i data-lucide="brain"></i>
+              </div>
+              <span class="project-status status-planned">Demo</span>
+            </div>
+            <h3 class="card-title">Neural Signal Classification for Motor Intent</h3>
+            <p class="card-description">
+              Deep learning pipeline to classify neural signals and predict motor intent from ECoG data for brain-computer interfaces.
+            </p>
+            <div class="tag-group">
+              <span class="tag tag-primary">Deep Learning</span>
+              <span class="tag tag-secondary">BCI</span>
+              <span class="tag tag-accent">Signal Processing</span>
+            </div>
+            <div class="card-footer">
+              <a href="https://github.com/kiranshay/neural-signal-classifier-for" target="_blank" rel="noopener" class="btn btn-ghost btn-sm">
+                <i data-lucide="github"></i> Code
+              </a>
+              <a href="https://neural-signal-classifier.streamlit.app" target="_blank" rel="noopener" class="btn btn-ghost btn-sm">
+                <i data-lucide="external-link"></i> Demo
+              </a>
+            </div>
+          </article>
+
+          <!-- Project: Multi-Modal Cell Type Classifier -->
+          <article class="card project-card" data-tags="ml neuro">
+            <div class="card-header">
+              <div class="project-icon">
+                <i data-lucide="dna"></i>
+              </div>
+              <span class="project-status status-planned">Demo</span>
+            </div>
+            <h3 class="card-title">Multi-Modal Cell Type Classifier</h3>
+            <p class="card-description">
+              Unified model classifying neuron types by fusing electrophysiology, morphology, and transcriptomics data.
+            </p>
+            <div class="tag-group">
+              <span class="tag tag-primary">Multi-Modal</span>
+              <span class="tag tag-secondary">Deep Learning</span>
+              <span class="tag tag-accent">Neuroscience</span>
+            </div>
+            <div class="card-footer">
+              <a href="https://github.com/kiranshay/multi-modal-cell-type" target="_blank" rel="noopener" class="btn btn-ghost btn-sm">
+                <i data-lucide="github"></i> Code
+              </a>
+              <a href="https://multi-modal-cell-type.streamlit.app" target="_blank" rel="noopener" class="btn btn-ghost btn-sm">
+                <i data-lucide="external-link"></i> Demo
+              </a>
+            </div>
+          </article>
+
+          <!-- Project: Synaptic Connectivity Prediction -->
+          <article class="card project-card" data-tags="ml neuro">
+            <div class="card-header">
+              <div class="project-icon">
+                <i data-lucide="git-branch"></i>
+              </div>
+              <span class="project-status status-planned">Demo</span>
+            </div>
+            <h3 class="card-title">Synaptic Connectivity Prediction with GNNs</h3>
+            <p class="card-description">
+              Predict neural connections from 3D morphology using Graph Neural Networks.
+            </p>
+            <div class="tag-group">
+              <span class="tag tag-primary">Graph Neural Networks</span>
+              <span class="tag tag-secondary">Connectomics</span>
+              <span class="tag tag-accent">PyTorch Geometric</span>
+            </div>
+            <div class="card-footer">
+              <a href="https://github.com/kiranshay/synaptic-connectivity-prediction-with" target="_blank" rel="noopener" class="btn btn-ghost btn-sm">
+                <i data-lucide="github"></i> Code
+              </a>
+              <a href="https://synaptic-connectivity.streamlit.app" target="_blank" rel="noopener" class="btn btn-ghost btn-sm">
+                <i data-lucide="external-link"></i> Demo
+              </a>
+            </div>
+          </article>
+
+          <!-- Project: Alzheimer's Disease Progression Modeling -->
+          <article class="card project-card" data-tags="ml neuro">
+            <div class="card-header">
+              <div class="project-icon">
+                <i data-lucide="scan"></i>
+              </div>
+              <span class="project-status status-planned">Demo</span>
+            </div>
+            <h3 class="card-title">Alzheimer's Disease Progression Modeling</h3>
+            <p class="card-description">
+              Deep learning system for predicting Alzheimer's progression using longitudinal MRI scans.
+              3D CNN-LSTM architecture captures spatial and temporal patterns for early intervention.
+            </p>
+            <div class="tag-group">
+              <span class="tag tag-primary">3D CNN-LSTM</span>
+              <span class="tag tag-secondary">Neuroimaging</span>
+              <span class="tag tag-accent">Healthcare ML</span>
+            </div>
+            <div class="card-footer">
+              <a href="https://github.com/kiranshay/alzheimers-disease-progression-modeling" target="_blank" rel="noopener" class="btn btn-ghost btn-sm">
+                <i data-lucide="github"></i> Code
+              </a>
+              <a href="https://alzheimers-modeling.streamlit.app" target="_blank" rel="noopener" class="btn btn-ghost btn-sm">
+                <i data-lucide="external-link"></i> Demo
+              </a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-links">
+          <a href="mailto:kiranshay123@gmail.com"><i data-lucide="mail"></i></a>
+          <a href="https://www.linkedin.com/in/kiran-shay/" target="_blank"><i data-lucide="linkedin"></i></a>
+          <a href="https://github.com/kiranshay" target="_blank"><i data-lucide="github"></i></a>
+        </div>
+        <p>&copy; 2025 Kiran Shay &middot; Johns Hopkins University</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

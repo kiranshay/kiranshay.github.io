@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About | Kiran Shay</title>
+  <meta name="description" content="About Kiran Shay - Neuroscience and Computer Science student at Johns Hopkins University.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a href="#main-content" class="skip-to-content">Skip to content</a>
+
+  <!-- Navigation -->
+  <nav class="nav" id="nav">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">KS</a>
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="about.html" class="nav-link active">About</a></li>
+        <li><a href="projects.html" class="nav-link">Projects</a></li>
+        <li><a href="skills.html" class="nav-link">Skills</a></li>
+        <li><a href="contact.html" class="nav-link">Contact</a></li>
+      </ul>
+      <button class="nav-toggle" aria-label="Toggle menu">
+        <i data-lucide="menu"></i>
+      </button>
+    </div>
+  </nav>
+
+  <div class="mobile-nav" id="mobile-nav">
+    <ul class="mobile-nav-links">
+      <li><a href="index.html" class="nav-link">Home</a></li>
+      <li><a href="about.html" class="nav-link active">About</a></li>
+      <li><a href="projects.html" class="nav-link">Projects</a></li>
+      <li><a href="skills.html" class="nav-link">Skills</a></li>
+      <li><a href="contact.html" class="nav-link">Contact</a></li>
+    </ul>
+  </div>
+
+  <main id="main-content">
+    <section class="page-header">
+      <div class="container">
+        <h1 class="page-title">About Me</h1>
+        <p class="page-subtitle">Neuroscience meets Machine Learning</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container container-narrow">
+        <div class="about-content-full">
+          <div class="about-intro">
+            <p class="about-lead">
+              I'm a junior at <strong>Johns Hopkins University</strong> studying Computer Science and Neuroscience,
+              with minors in Applied Mathematics & Statistics and Business.
+            </p>
+          </div>
+
+          <div class="about-section">
+            <h2><i data-lucide="target"></i> My Mission</h2>
+            <p>
+              I'm driven by a simple question: <em>how can we use computational tools to decode the complexity of living systems?</em>
+              My work sits at the intersection of machine learning and biological systems, using data-driven approaches to
+              understand the brain and improve healthcare.
+            </p>
+          </div>
+
+          <div class="about-section">
+            <h2><i data-lucide="flask-conical"></i> Current Research</h2>
+            <p>
+              I'm currently building <strong>TremorML</strong>, an ML pipeline that differentiates neurological tremor types
+              from wearable sensor data. This is exactly the kind of applied ML for healthcare I want to pursue:
+              taking complex biological signals and turning them into actionable clinical insights.
+            </p>
+          </div>
+
+          <div class="about-section">
+            <h2><i data-lucide="trophy"></i> Recent Achievements</h2>
+            <div class="achievement-card">
+              <div class="achievement-icon">
+                <i data-lucide="award"></i>
+              </div>
+              <div class="achievement-content">
+                <h3>2025 JHU Design Day Digital Vanguard Award</h3>
+                <p>
+                  Won for my <a href="https://lineupoptimization.com" target="_blank" class="link link-underline">Baseball Lineup Optimizer</a>,
+                  which uses Markov chains and Monte Carlo simulation to maximize expected runs.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="about-section">
+            <h2><i data-lucide="users"></i> Beyond Research</h2>
+            <p>
+              I contribute to <strong>Delineo</strong>, JHU's infectious disease simulation engine,
+              helping model stochastic disease spread across communities.
+            </p>
+            <p>
+              I also co-founded <strong>Affordable Tutoring Solutions</strong> as CTO, building EdTech
+              infrastructure to serve students from underserved communities.
+            </p>
+          </div>
+
+          <div class="about-section">
+            <h2><i data-lucide="book-open"></i> Education</h2>
+            <div class="education-card">
+              <div class="education-logo">JHU</div>
+              <div class="education-content">
+                <h3>Johns Hopkins University</h3>
+                <p class="education-degree">B.S. Computer Science & Neuroscience</p>
+                <p class="education-details">Minors: Applied Mathematics & Statistics, Business</p>
+                <p class="education-year">Expected 2026</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="about-section">
+            <h2><i data-lucide="heart"></i> Interests</h2>
+            <div class="interests-grid">
+              <div class="interest-item">
+                <i data-lucide="brain"></i>
+                <span>Computational Neuroscience</span>
+              </div>
+              <div class="interest-item">
+                <i data-lucide="activity"></i>
+                <span>Healthcare ML</span>
+              </div>
+              <div class="interest-item">
+                <i data-lucide="bar-chart-3"></i>
+                <span>Sports Analytics</span>
+              </div>
+              <div class="interest-item">
+                <i data-lucide="dices"></i>
+                <span>Stochastic Modeling</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="about-cta-section">
+            <p>
+              Currently seeking research opportunities and collaborations in applied ML for biological systems.
+            </p>
+            <a href="contact.html" class="btn btn-primary">
+              <i data-lucide="mail"></i>
+              Let's Connect
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-links">
+          <a href="mailto:kiranshay123@gmail.com"><i data-lucide="mail"></i></a>
+          <a href="https://www.linkedin.com/in/kiran-shay/" target="_blank"><i data-lucide="linkedin"></i></a>
+          <a href="https://github.com/kiranshay" target="_blank"><i data-lucide="github"></i></a>
+        </div>
+        <p>&copy; 2025 Kiran Shay &middot; Johns Hopkins University</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
