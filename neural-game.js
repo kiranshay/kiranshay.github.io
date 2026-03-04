@@ -788,7 +788,7 @@ class NeuralNetworkGame {
     ctx.font = 'bold 11px Inter, sans-serif';
     // x₁ label (slightly right of bottom-right corner)
     ctx.textAlign = 'left';
-    ctx.fillText('x₁', mapX + mapSize + 8, mapY + 18 + mapSize);
+    ctx.fillText('x₁', mapX + mapSize + 10, mapY + 18 + mapSize);
     // x₂ label (slightly left of top-left corner)
     ctx.textAlign = 'right';
     ctx.fillText('x₂', mapX - 8, mapY + 18);
