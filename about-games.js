@@ -245,61 +245,69 @@ class DecisionBoundaryGame {
 
     const { plotSize, plotX, plotY } = this.getPlotDimensions();
 
-    // Draw decision boundary heatmap
-    const resolution = 40;
-    const cellSize = plotSize / resolution;
+    // Show grey background when no points (ready state), otherwise show decision boundary
+    if (this.points.length === 0) {
+      // Neutral grey fill to indicate ready state
+      ctx.fillStyle = 'rgba(100, 116, 139, 0.4)';
+      ctx.fillRect(plotX, plotY, plotSize, plotSize);
+    } else {
+      // Draw decision boundary heatmap
+      const resolution = 40;
+      const cellSize = plotSize / resolution;
 
-    for (let i = 0; i < resolution; i++) {
-      for (let j = 0; j < resolution; j++) {
-        const x = (i + 0.5) / resolution;
-        const y = (j + 0.5) / resolution;
-        const pred = this.forward([x, y]);
+      for (let i = 0; i < resolution; i++) {
+        for (let j = 0; j < resolution; j++) {
+          const x = (i + 0.5) / resolution;
+          const y = (j + 0.5) / resolution;
+          const pred = this.forward([x, y]);
 
-        // Interpolate between blue and orange based on prediction
-        const t = pred;
-        // Blue (class 0): #3b82f6, Orange (class 1): #f97316
-        const r = Math.floor(59 + t * (249 - 59));
-        const g = Math.floor(130 + t * (115 - 130));
-        const b = Math.floor(246 + t * (22 - 246));
+          // Interpolate between blue and orange based on prediction
+          const t = pred;
+          // Blue (class 0): #3b82f6, Orange (class 1): #f97316
+          const r = Math.floor(59 + t * (249 - 59));
+          const g = Math.floor(130 + t * (115 - 130));
+          const b = Math.floor(246 + t * (22 - 246));
 
-        ctx.fillStyle = `rgba(${r}, ${g}, ${b}, 0.4)`;
-        ctx.fillRect(
-          plotX + i * cellSize,
-          plotY + (resolution - 1 - j) * cellSize,
-          cellSize + 1,
-          cellSize + 1
-        );
+          ctx.fillStyle = `rgba(${r}, ${g}, ${b}, 0.4)`;
+          ctx.fillRect(
+            plotX + i * cellSize,
+            plotY + (resolution - 1 - j) * cellSize,
+            cellSize + 1,
+            cellSize + 1
+          );
+        }
       }
-    }
 
-    // Draw decision boundary line (pred = 0.5)
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
-    ctx.lineWidth = 2;
-    ctx.setLineDash([4, 4]);
-    ctx.beginPath();
+      // Draw decision boundary line (pred = 0.5)
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath();
 
-    let firstPoint = true;
-    for (let i = 0; i <= resolution; i++) {
-      for (let j = 0; j <= resolution; j++) {
-        const x = i / resolution;
-        const y = j / resolution;
-        const pred = this.forward([x, y]);
+      let firstPoint = true;
+      const resolution2 = 40;
+      for (let i = 0; i <= resolution2; i++) {
+        for (let j = 0; j <= resolution2; j++) {
+          const x = i / resolution2;
+          const y = j / resolution2;
+          const pred = this.forward([x, y]);
 
-        if (Math.abs(pred - 0.5) < 0.05) {
-          const sx = plotX + x * plotSize;
-          const sy = plotY + (1 - y) * plotSize;
+          if (Math.abs(pred - 0.5) < 0.05) {
+            const sx = plotX + x * plotSize;
+            const sy = plotY + (1 - y) * plotSize;
 
-          if (firstPoint) {
-            ctx.moveTo(sx, sy);
-            firstPoint = false;
-          } else {
-            ctx.lineTo(sx, sy);
+            if (firstPoint) {
+              ctx.moveTo(sx, sy);
+              firstPoint = false;
+            } else {
+              ctx.lineTo(sx, sy);
+            }
           }
         }
       }
+      ctx.stroke();
+      ctx.setLineDash([]);
     }
-    ctx.stroke();
-    ctx.setLineDash([]);
 
     // Draw plot border
     ctx.strokeStyle = '#475569';
