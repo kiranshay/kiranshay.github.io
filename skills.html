@@ -51,153 +51,30 @@
       </div>
     </section>
 
-    <section class="section">
+    <!-- Interactive Skill Tree -->
+    <section class="section section-alt">
       <div class="container">
-        <div class="skills-grid-full">
-          <!-- Machine Learning -->
-          <div class="skill-category-card">
-            <div class="skill-category-header">
-              <div class="skill-category-icon">
-                <i data-lucide="cpu"></i>
-              </div>
-              <h2>Machine Learning</h2>
-            </div>
-            <div class="skill-list">
-              <div class="skill-item">
-                <span class="skill-name">XGBoost</span>
-                <div class="skill-bar"><div class="skill-level" style="width: 90%;"></div></div>
-              </div>
-              <div class="skill-item">
-                <span class="skill-name">Random Forests</span>
-                <div class="skill-bar"><div class="skill-level" style="width: 90%;"></div></div>
-              </div>
-              <div class="skill-item">
-                <span class="skill-name">Deep Neural Networks</span>
-                <div class="skill-bar"><div class="skill-level" style="width: 80%;"></div></div>
-              </div>
-              <div class="skill-item">
-                <span class="skill-name">Time-Series Classification</span>
-                <div class="skill-bar"><div class="skill-level" style="width: 85%;"></div></div>
-              </div>
-              <div class="skill-item">
-                <span class="skill-name">Feature Engineering</span>
-                <div class="skill-bar"><div class="skill-level" style="width: 85%;"></div></div>
-              </div>
-              <div class="skill-item">
-                <span class="skill-name">Imbalanced Learning (SMOTE)</span>
-                <div class="skill-bar"><div class="skill-level" style="width: 80%;"></div></div>
-              </div>
-            </div>
-          </div>
+        <h2 class="section-title">Interactive Skill Tree</h2>
+        <p class="section-subtitle">Explore how my skills connect - from foundational knowledge to domain expertise</p>
 
-          <!-- Quantitative Methods -->
-          <div class="skill-category-card">
-            <div class="skill-category-header">
-              <div class="skill-category-icon accent">
-                <i data-lucide="bar-chart-3"></i>
-              </div>
-              <h2>Quantitative Methods</h2>
-            </div>
-            <div class="skill-list">
-              <div class="skill-item">
-                <span class="skill-name">Stochastic Modeling</span>
-                <div class="skill-bar accent"><div class="skill-level" style="width: 90%;"></div></div>
-              </div>
-              <div class="skill-item">
-                <span class="skill-name">Monte Carlo Simulation</span>
-                <div class="skill-bar accent"><div class="skill-level" style="width: 90%;"></div></div>
-              </div>
-              <div class="skill-item">
-                <span class="skill-name">Markov Chains</span>
-                <div class="skill-bar accent"><div class="skill-level" style="width: 85%;"></div></div>
-              </div>
-              <div class="skill-item">
-                <span class="skill-name">Probability & Statistics</span>
-                <div class="skill-bar accent"><div class="skill-level" style="width: 90%;"></div></div>
-              </div>
-              <div class="skill-item">
-                <span class="skill-name">Optimization</span>
-                <div class="skill-bar accent"><div class="skill-level" style="width: 80%;"></div></div>
-              </div>
-              <div class="skill-item">
-                <span class="skill-name">Linear Algebra</span>
-                <div class="skill-bar accent"><div class="skill-level" style="width: 85%;"></div></div>
-              </div>
-            </div>
+        <div class="skill-tree-container">
+          <div class="skill-tree-canvas-wrapper">
+            <canvas id="skill-tree-canvas"></canvas>
           </div>
-
-          <!-- Programming -->
-          <div class="skill-category-card">
-            <div class="skill-category-header">
-              <div class="skill-category-icon secondary">
-                <i data-lucide="code"></i>
-              </div>
-              <h2>Programming & Tools</h2>
-            </div>
-            <div class="skill-list">
-              <div class="skill-item">
-                <span class="skill-name">Python</span>
-                <div class="skill-bar secondary"><div class="skill-level" style="width: 95%;"></div></div>
-              </div>
-              <div class="skill-item">
-                <span class="skill-name">NumPy / Pandas</span>
-                <div class="skill-bar secondary"><div class="skill-level" style="width: 90%;"></div></div>
-              </div>
-              <div class="skill-item">
-                <span class="skill-name">Scikit-learn</span>
-                <div class="skill-bar secondary"><div class="skill-level" style="width: 90%;"></div></div>
-              </div>
-              <div class="skill-item">
-                <span class="skill-name">PyTorch</span>
-                <div class="skill-bar secondary"><div class="skill-level" style="width: 75%;"></div></div>
-              </div>
-              <div class="skill-item">
-                <span class="skill-name">Full Stack Development</span>
-                <div class="skill-bar secondary"><div class="skill-level" style="width: 80%;"></div></div>
-              </div>
-              <div class="skill-item">
-                <span class="skill-name">Git / Version Control</span>
-                <div class="skill-bar secondary"><div class="skill-level" style="width: 85%;"></div></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Domain Expertise -->
-          <div class="skill-category-card">
-            <div class="skill-category-header">
-              <div class="skill-category-icon neutral">
-                <i data-lucide="brain"></i>
-              </div>
-              <h2>Domain Expertise</h2>
-            </div>
-            <div class="skill-list">
-              <div class="skill-item">
-                <span class="skill-name">Neuroscience</span>
-                <div class="skill-bar neutral"><div class="skill-level" style="width: 85%;"></div></div>
-              </div>
-              <div class="skill-item">
-                <span class="skill-name">Signal Processing</span>
-                <div class="skill-bar neutral"><div class="skill-level" style="width: 85%;"></div></div>
-              </div>
-              <div class="skill-item">
-                <span class="skill-name">Disease Modeling</span>
-                <div class="skill-bar neutral"><div class="skill-level" style="width: 80%;"></div></div>
-              </div>
-              <div class="skill-item">
-                <span class="skill-name">Sports Analytics</span>
-                <div class="skill-bar neutral"><div class="skill-level" style="width: 85%;"></div></div>
-              </div>
-              <div class="skill-item">
-                <span class="skill-name">Healthcare ML</span>
-                <div class="skill-bar neutral"><div class="skill-level" style="width: 80%;"></div></div>
-              </div>
-              <div class="skill-item">
-                <span class="skill-name">Data Visualization</span>
-                <div class="skill-bar neutral"><div class="skill-level" style="width: 85%;"></div></div>
-              </div>
-            </div>
+          <div class="skill-info-panel" id="skill-info-panel">
+            <p class="skill-info-placeholder">Click on a skill node to see details</p>
           </div>
         </div>
+
+        <p class="skill-tree-hint">
+          <i data-lucide="mouse-pointer-click"></i>
+          Hover over nodes to highlight connections. Click to see skill details.
+        </p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
 
         <!-- Certifications / Coursework -->
         <div class="skills-section-divider">
@@ -255,5 +132,6 @@
   </footer>
 
   <script src="script.js"></script>
+  <script src="skills-tree.js"></script>
 </body>
 </html>
