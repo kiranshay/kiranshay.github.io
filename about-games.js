@@ -243,8 +243,8 @@ class DecisionBoundaryGame {
 
     const { plotSize, plotX, plotY } = this.getPlotDimensions();
 
-    // Show grey background when no points (ready state), otherwise show decision boundary
-    if (this.points.length === 0) {
+    // Show grey background until training starts (epoch > 0)
+    if (this.epoch === 0) {
       // Neutral grey fill to indicate ready state
       ctx.fillStyle = 'rgba(100, 116, 139, 0.4)';
       ctx.fillRect(plotX, plotY, plotSize, plotSize);
