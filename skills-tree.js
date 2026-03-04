@@ -49,65 +49,66 @@ class SkillTree {
     };
 
     // Node definitions with relative positions (0-1 range)
+    // Using padding: nodes positioned between 0.08-0.92 horizontally, 0.10-0.88 vertically
     this.nodes = [
       // Foundation layer (bottom)
-      { id: 'math', name: 'Mathematics', category: 'foundation', x: 0.3, y: 0.85, proficiency: 90,
+      { id: 'math', name: 'Mathematics', category: 'foundation', x: 0.28, y: 0.82, proficiency: 90,
         description: 'Linear algebra, calculus, discrete math' },
-      { id: 'stats', name: 'Statistics', category: 'foundation', x: 0.5, y: 0.9, proficiency: 90,
+      { id: 'stats', name: 'Statistics', category: 'foundation', x: 0.50, y: 0.86, proficiency: 90,
         description: 'Probability theory, statistical inference' },
-      { id: 'programming', name: 'Programming', category: 'foundation', x: 0.7, y: 0.85, proficiency: 95,
+      { id: 'programming', name: 'Programming', category: 'foundation', x: 0.72, y: 0.82, proficiency: 95,
         description: 'Core programming concepts and algorithms' },
 
       // Quantitative layer
-      { id: 'prob', name: 'Probability', category: 'quant', x: 0.25, y: 0.65, proficiency: 90,
+      { id: 'prob', name: 'Probability', category: 'quant', x: 0.22, y: 0.64, proficiency: 90,
         description: 'Probability distributions, Bayesian methods' },
-      { id: 'linalg', name: 'Linear Algebra', category: 'quant', x: 0.45, y: 0.7, proficiency: 85,
+      { id: 'linalg', name: 'Linear Algebra', category: 'quant', x: 0.42, y: 0.68, proficiency: 85,
         description: 'Matrix operations, eigenvalues, SVD' },
-      { id: 'optimization', name: 'Optimization', category: 'quant', x: 0.55, y: 0.65, proficiency: 80,
+      { id: 'optimization', name: 'Optimization', category: 'quant', x: 0.58, y: 0.64, proficiency: 80,
         description: 'Convex optimization, gradient methods' },
 
       // Programming layer
-      { id: 'python', name: 'Python', category: 'programming', x: 0.75, y: 0.7, proficiency: 95,
+      { id: 'python', name: 'Python', category: 'programming', x: 0.78, y: 0.68, proficiency: 95,
         description: 'Primary language for ML and data science' },
-      { id: 'numpy', name: 'NumPy/Pandas', category: 'programming', x: 0.85, y: 0.55, proficiency: 90,
+      { id: 'numpy', name: 'NumPy/Pandas', category: 'programming', x: 0.88, y: 0.54, proficiency: 90,
         description: 'Data manipulation and numerical computing' },
-      { id: 'sklearn', name: 'Scikit-learn', category: 'programming', x: 0.8, y: 0.4, proficiency: 90,
+      { id: 'sklearn', name: 'Scikit-learn', category: 'programming', x: 0.84, y: 0.40, proficiency: 90,
         description: 'Classical ML algorithms and pipelines' },
-      { id: 'pytorch', name: 'PyTorch', category: 'programming', x: 0.9, y: 0.3, proficiency: 75,
+      { id: 'pytorch', name: 'PyTorch', category: 'programming', x: 0.90, y: 0.28, proficiency: 75,
         description: 'Deep learning framework' },
 
       // Stochastic methods
-      { id: 'stochastic', name: 'Stochastic Modeling', category: 'quant', x: 0.2, y: 0.45, proficiency: 90,
+      { id: 'stochastic', name: 'Stochastic Modeling', category: 'quant', x: 0.16, y: 0.46, proficiency: 90,
         description: 'Random processes, simulation methods' },
-      { id: 'markov', name: 'Markov Chains', category: 'quant', x: 0.15, y: 0.3, proficiency: 85,
+      { id: 'markov', name: 'Markov Chains', category: 'quant', x: 0.10, y: 0.30, proficiency: 85,
         description: 'State transitions, steady-state analysis' },
-      { id: 'monte_carlo', name: 'Monte Carlo', category: 'quant', x: 0.3, y: 0.35, proficiency: 90,
+      { id: 'monte_carlo', name: 'Monte Carlo', category: 'quant', x: 0.26, y: 0.34, proficiency: 90,
         description: 'Simulation and estimation techniques' },
 
       // ML Core
-      { id: 'ml_fundamentals', name: 'ML Fundamentals', category: 'ml', x: 0.5, y: 0.45, proficiency: 88,
+      { id: 'ml_fundamentals', name: 'ML Fundamentals', category: 'ml', x: 0.50, y: 0.46, proficiency: 88,
         description: 'Supervised/unsupervised learning, evaluation' },
-      { id: 'feature_eng', name: 'Feature Engineering', category: 'ml', x: 0.4, y: 0.35, proficiency: 85,
+      { id: 'feature_eng', name: 'Feature Engineering', category: 'ml', x: 0.38, y: 0.34, proficiency: 85,
         description: 'Feature extraction and selection' },
-      { id: 'trees', name: 'Tree Methods', category: 'ml', x: 0.55, y: 0.3, proficiency: 90,
+      { id: 'trees', name: 'Tree Methods', category: 'ml', x: 0.58, y: 0.30, proficiency: 90,
         description: 'Decision trees, ensemble methods' },
-      { id: 'xgboost', name: 'XGBoost', category: 'ml', x: 0.5, y: 0.18, proficiency: 90,
+      { id: 'xgboost', name: 'XGBoost', category: 'ml', x: 0.50, y: 0.18, proficiency: 90,
         description: 'Gradient boosting for tabular data' },
-      { id: 'dnn', name: 'Deep Learning', category: 'ml', x: 0.65, y: 0.22, proficiency: 80,
+      { id: 'dnn', name: 'Deep Learning', category: 'ml', x: 0.68, y: 0.22, proficiency: 80,
         description: 'Neural network architectures' },
-      { id: 'timeseries', name: 'Time-Series ML', category: 'ml', x: 0.35, y: 0.2, proficiency: 85,
+      { id: 'timeseries', name: 'Time-Series ML', category: 'ml', x: 0.34, y: 0.20, proficiency: 85,
         description: 'Temporal pattern recognition' },
 
       // Domain expertise (top)
-      { id: 'neuro', name: 'Neuroscience', category: 'domain', x: 0.2, y: 0.12, proficiency: 85,
+      { id: 'neuro', name: 'Neuroscience', category: 'domain', x: 0.18, y: 0.14, proficiency: 85,
         description: 'Neural systems and brain function' },
-      { id: 'signal', name: 'Signal Processing', category: 'domain', x: 0.35, y: 0.08, proficiency: 85,
+      { id: 'signal', name: 'Signal Processing', category: 'domain', x: 0.34, y: 0.10, proficiency: 85,
         description: 'Filtering, spectral analysis' },
-      { id: 'healthcare_ml', name: 'Healthcare ML', category: 'domain', x: 0.5, y: 0.05, proficiency: 80,
+      { id: 'healthcare_ml', name: 'Healthcare ML', category: 'domain', x: 0.50, y: 0.08, proficiency: 80,
         description: 'Clinical prediction models' },
-      { id: 'sports', name: 'Sports Analytics', category: 'domain', x: 0.65, y: 0.08, proficiency: 85,
+      { id: 'sports', name: 'Sports Analytics', category: 'domain', x: 0.66, y: 0.10, proficiency: 85,
         description: 'Performance modeling, sabermetrics' },
-      { id: 'disease', name: 'Disease Modeling', category: 'domain', x: 0.8, y: 0.12, proficiency: 80,
+      { id: 'disease', name: 'Disease Modeling', category: 'domain', x: 0.82, y: 0.14, proficiency: 80,
         description: 'Epidemiological simulations' }
     ];
 
@@ -162,21 +163,26 @@ class SkillTree {
     const rect = container.getBoundingClientRect();
     const dpr = window.devicePixelRatio || 1;
 
-    // Set canvas size
+    // Set canvas size - more compact height
+    const canvasHeight = 420;
     this.canvas.width = rect.width * dpr;
-    this.canvas.height = 500 * dpr;
+    this.canvas.height = canvasHeight * dpr;
     this.canvas.style.width = rect.width + 'px';
-    this.canvas.style.height = '500px';
+    this.canvas.style.height = canvasHeight + 'px';
 
     this.ctx.scale(dpr, dpr);
     this.width = rect.width;
-    this.height = 500;
+    this.height = canvasHeight;
 
-    // Convert relative positions to actual pixel positions
+    // Padding to keep nodes away from edges
+    const padX = 40;
+    const padY = 35;
+
+    // Convert relative positions to actual pixel positions with padding
     this.nodes.forEach(node => {
-      node.px = node.x * this.width;
-      node.py = node.y * this.height;
-      node.radius = 24 + (node.proficiency / 100) * 8;
+      node.px = padX + node.x * (this.width - 2 * padX);
+      node.py = padY + node.y * (this.height - 2 * padY);
+      node.radius = 22 + (node.proficiency / 100) * 6; // Slightly smaller nodes
     });
   }
 

@@ -2503,6 +2503,11 @@ img {
    SKILL TREE VISUALIZATION
    =================================== */
 
+/* Reduce padding on skills page sections */
+.section.section-alt + .section {
+  padding-top: var(--spacing-8);
+}
+
 .skill-tree-container {
   display: grid;
   grid-template-columns: 1fr 280px;
@@ -2510,7 +2515,7 @@ img {
   background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.95) 100%);
   border: 1px solid rgba(102, 126, 234, 0.3);
   border-radius: 16px;
-  padding: var(--spacing-6);
+  padding: var(--spacing-5);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
