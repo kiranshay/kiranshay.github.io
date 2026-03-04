@@ -502,13 +502,13 @@ class MonteCarloPiGame {
     const dpr = window.devicePixelRatio || 1;
 
     this.canvas.width = Math.min(400, rect.width - 40) * dpr;
-    this.canvas.height = 320 * dpr;
+    this.canvas.height = 360 * dpr;
     this.canvas.style.width = `${Math.min(400, rect.width - 40)}px`;
-    this.canvas.style.height = '320px';
+    this.canvas.style.height = '360px';
     this.ctx.scale(dpr, dpr);
 
     this.width = Math.min(400, rect.width - 40);
-    this.height = 320;
+    this.height = 360;
   }
 
   reset() {
