@@ -645,9 +645,9 @@ class MonteCarloPiGame {
     this.addPoints(this.speed);
     this.render();
 
-    // Auto-stop when error is at or below 0.002
+    // Auto-stop when error is at or below 0.0005
     const error = Math.abs(this.piEstimate - Math.PI);
-    if (this.totalCount > 0 && error <= 0.002) {
+    if (this.totalCount > 0 && error <= 0.0005) {
       this.stop();
       return;
     }
