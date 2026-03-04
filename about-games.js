@@ -51,12 +51,28 @@ class DecisionBoundaryGame {
   }
 
   initNetwork() {
-    // Simple 2-layer network: 2 -> 16 -> 1 (increased hidden neurons)
-    // Using He initialization for ReLU: sqrt(2/fan_in)
-    this.w1 = this.randomMatrix(2, 16, Math.sqrt(2 / 2));
+    // Simple 2-layer network: 2 -> 16 -> 1
+    // Initialize with a smooth diagonal gradient (blue bottom-left to orange top-right)
+    this.w1 = this.zeroMatrix(2, 16);
     this.b1 = this.zeroArray(16);
-    this.w2 = this.randomMatrix(16, 1, Math.sqrt(2 / 16));
+    this.w2 = this.zeroMatrix(16, 1);
     this.b2 = this.zeroArray(1);
+
+    // Set up first hidden neuron to compute a diagonal gradient
+    // output = sigmoid(k*(x + y - 1)) gives smooth diagonal
+    const k = 4;
+    this.w1[0][0] = k;  // x weight
+    this.w1[1][0] = k;  // y weight
+    this.b1[0] = -k;    // bias to center
+    this.w2[0][0] = 1;  // output weight
+  }
+
+  zeroMatrix(rows, cols) {
+    const m = [];
+    for (let i = 0; i < rows; i++) {
+      m[i] = Array(cols).fill(0);
+    }
+    return m;
   }
 
   randomMatrix(rows, cols, scale = 1) {
