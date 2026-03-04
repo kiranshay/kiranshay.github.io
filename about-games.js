@@ -41,13 +41,13 @@ class DecisionBoundaryGame {
     const dpr = window.devicePixelRatio || 1;
 
     this.canvas.width = Math.min(400, rect.width - 40) * dpr;
-    this.canvas.height = 320 * dpr;
+    this.canvas.height = 360 * dpr;
     this.canvas.style.width = `${Math.min(400, rect.width - 40)}px`;
-    this.canvas.style.height = '320px';
+    this.canvas.style.height = '360px';
     this.ctx.scale(dpr, dpr);
 
     this.width = Math.min(400, rect.width - 40);
-    this.height = 320;
+    this.height = 360;
   }
 
   initNetwork() {
@@ -218,8 +218,8 @@ class DecisionBoundaryGame {
     ctx.fillStyle = '#0f172a';
     ctx.fillRect(0, 0, w, h);
 
-    const padding = 20;
-    const plotSize = Math.min(w, h) - padding * 2;
+    const padding = 25;
+    const plotSize = Math.min(w, h - 60) - padding * 2;
     const plotX = (w - plotSize) / 2;
     const plotY = padding;
 
@@ -307,27 +307,28 @@ class DecisionBoundaryGame {
       ctx.stroke();
     }
 
-    // Instructions
-    ctx.fillStyle = '#94a3b8';
-    ctx.font = '11px Inter, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('Click to add points, then train!', w / 2, h - 8);
-
     // Legend
+    const legendY = plotY + plotSize + 25;
     ctx.textAlign = 'left';
     ctx.fillStyle = '#3b82f6';
     ctx.beginPath();
-    ctx.arc(plotX + 10, plotY + plotSize + 20, 6, 0, Math.PI * 2);
+    ctx.arc(plotX + 10, legendY, 6, 0, Math.PI * 2);
     ctx.fill();
     ctx.fillStyle = '#94a3b8';
-    ctx.fillText('Class A', plotX + 20, plotY + plotSize + 24);
+    ctx.font = '11px Inter, sans-serif';
+    ctx.fillText('Class A', plotX + 20, legendY + 4);
 
     ctx.fillStyle = '#f97316';
     ctx.beginPath();
-    ctx.arc(plotX + 80, plotY + plotSize + 20, 6, 0, Math.PI * 2);
+    ctx.arc(plotX + 80, legendY, 6, 0, Math.PI * 2);
     ctx.fill();
     ctx.fillStyle = '#94a3b8';
-    ctx.fillText('Class B', plotX + 90, plotY + plotSize + 24);
+    ctx.fillText('Class B', plotX + 90, legendY + 4);
+
+    // Instructions
+    ctx.fillStyle = '#94a3b8';
+    ctx.textAlign = 'center';
+    ctx.fillText('Click to add points, then train!', w / 2, h - 12);
   }
 
   animate() {
@@ -339,6 +340,12 @@ class DecisionBoundaryGame {
     }
     this.updateStats();
     this.render();
+
+    // Auto-stop when 100% accuracy is achieved
+    if (this.computeAccuracy() === 1.0 && this.points.length >= 2) {
+      this.stop();
+      return;
+    }
 
     this.animationId = requestAnimationFrame(() => this.animate());
   }
@@ -594,6 +601,13 @@ class MonteCarloPiGame {
 
     this.addPoints(this.speed);
     this.render();
+
+    // Auto-stop when error is at or below 0.002
+    const error = Math.abs(this.piEstimate - Math.PI);
+    if (this.totalCount > 0 && error <= 0.002) {
+      this.stop();
+      return;
+    }
 
     this.animationId = requestAnimationFrame(() => this.animate());
   }
