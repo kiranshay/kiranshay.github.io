@@ -27,7 +27,7 @@ class DecisionBoundaryGame {
     this.isTraining = false;
     this.animationId = null;
     this.epoch = 0;
-    this.learningRate = 0.5;
+    this.learningRate = 0.3;
 
     // Setup
     this.setupControls();
@@ -51,26 +51,32 @@ class DecisionBoundaryGame {
   }
 
   initNetwork() {
-    // Simple 2-layer network: 2 -> 8 -> 1
-    this.w1 = this.randomMatrix(2, 8);
-    this.b1 = this.randomArray(8);
-    this.w2 = this.randomMatrix(8, 1);
-    this.b2 = this.randomArray(1);
+    // Simple 2-layer network: 2 -> 16 -> 1 (increased hidden neurons)
+    // Using He initialization for ReLU: sqrt(2/fan_in)
+    this.w1 = this.randomMatrix(2, 16, Math.sqrt(2 / 2));
+    this.b1 = this.zeroArray(16);
+    this.w2 = this.randomMatrix(16, 1, Math.sqrt(2 / 16));
+    this.b2 = this.zeroArray(1);
   }
 
-  randomMatrix(rows, cols) {
+  randomMatrix(rows, cols, scale = 1) {
+    // He initialization: weights ~ N(0, sqrt(2/fan_in))
     const m = [];
     for (let i = 0; i < rows; i++) {
       m[i] = [];
       for (let j = 0; j < cols; j++) {
-        m[i][j] = (Math.random() - 0.5) * 2;
+        // Box-Muller transform for normal distribution
+        const u1 = Math.random();
+        const u2 = Math.random();
+        const normal = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
+        m[i][j] = normal * scale;
       }
     }
     return m;
   }
 
-  randomArray(n) {
-    return Array(n).fill(0).map(() => (Math.random() - 0.5) * 0.5);
+  zeroArray(n) {
+    return Array(n).fill(0);
   }
 
   sigmoid(x) {
@@ -91,8 +97,9 @@ class DecisionBoundaryGame {
 
   forward(input) {
     // Hidden layer with ReLU
+    const hiddenSize = 16;
     this.hidden = [];
-    for (let j = 0; j < 8; j++) {
+    for (let j = 0; j < hiddenSize; j++) {
       let sum = this.b1[j];
       for (let i = 0; i < 2; i++) {
         sum += input[i] * this.w1[i][j];
@@ -102,7 +109,7 @@ class DecisionBoundaryGame {
 
     // Output layer with sigmoid
     let output = this.b2[0];
-    for (let j = 0; j < 8; j++) {
+    for (let j = 0; j < hiddenSize; j++) {
       output += this.hidden[j] * this.w2[j][0];
     }
     this.output = this.sigmoid(output);
@@ -111,29 +118,31 @@ class DecisionBoundaryGame {
   }
 
   backward(input, target) {
+    const hiddenSize = 16;
+
     // Output error
     const outputError = target - this.output;
     const outputDelta = outputError * this.sigmoidDerivative(this.output);
 
     // Hidden error
     const hiddenDelta = [];
-    for (let j = 0; j < 8; j++) {
+    for (let j = 0; j < hiddenSize; j++) {
       const error = outputDelta * this.w2[j][0];
       hiddenDelta[j] = error * this.reluDerivative(this.hidden[j]);
     }
 
     // Update weights
-    for (let j = 0; j < 8; j++) {
+    for (let j = 0; j < hiddenSize; j++) {
       this.w2[j][0] += this.learningRate * outputDelta * this.hidden[j];
     }
     this.b2[0] += this.learningRate * outputDelta;
 
     for (let i = 0; i < 2; i++) {
-      for (let j = 0; j < 8; j++) {
+      for (let j = 0; j < hiddenSize; j++) {
         this.w1[i][j] += this.learningRate * hiddenDelta[j] * input[i];
       }
     }
-    for (let j = 0; j < 8; j++) {
+    for (let j = 0; j < hiddenSize; j++) {
       this.b1[j] += this.learningRate * hiddenDelta[j];
     }
 
