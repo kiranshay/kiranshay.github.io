@@ -2404,6 +2404,7 @@ img {
   justify-content: center;
   gap: var(--spacing-2);
   flex-wrap: wrap;
+  margin-top: var(--spacing-4);
 }
 
 .interactive-buttons .btn {
