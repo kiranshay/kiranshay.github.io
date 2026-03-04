@@ -190,12 +190,13 @@ class DecisionBoundaryGame {
 
   setupCanvasInteraction() {
     this.canvas.addEventListener('click', (e) => {
-      const rect = this.canvas.getBoundingClientRect();
-      const scaleX = this.width / rect.width;
-      const scaleY = this.height / rect.height;
+      // Use offsetX/offsetY for accurate canvas-relative coordinates
+      // Then scale by the ratio of logical size to displayed size
+      const displayWidth = this.canvas.offsetWidth;
+      const displayHeight = this.canvas.offsetHeight;
 
-      const clickX = (e.clientX - rect.left) * scaleX;
-      const clickY = (e.clientY - rect.top) * scaleY;
+      const clickX = e.offsetX * (this.width / displayWidth);
+      const clickY = e.offsetY * (this.height / displayHeight);
 
       // Convert to normalized coordinates (0-1)
       const { plotSize, plotX, plotY } = this.getPlotDimensions();
