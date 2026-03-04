@@ -634,8 +634,8 @@ class NeuralNetworkGame {
     ctx.fillText(problemName + ' Truth Table', tableX + 80, tableY - 5);
 
     // Headers
-    ctx.fillStyle = '#94a3b8';
-    ctx.font = '11px Inter, sans-serif';
+    ctx.fillStyle = '#e2e8f0';
+    ctx.font = 'bold 11px Inter, sans-serif';
     const headers = ['x₁', 'x₂', 'Target', 'Pred'];
     headers.forEach((h, i) => {
       ctx.fillText(h, tableX + i * cellW + 15, tableY + 20);
@@ -783,24 +783,15 @@ class NeuralNetworkGame {
       ctx.fillText(`(${this.testPoint.x.toFixed(2)}, ${this.testPoint.y.toFixed(2)}) → ${pred.toFixed(3)}`, panelX + 82, mapY + mapSize + 35);
     }
 
-    // Axis labels
-    ctx.fillStyle = '#94a3b8';
-    ctx.font = '10px Inter, sans-serif';
-    ctx.textAlign = 'center';
-    // x₁ axis (horizontal)
-    ctx.fillText('0', mapX - 8, mapY + mapSize + 24);
-    ctx.fillText('1', mapX + mapSize + 8, mapY + mapSize + 24);
-    ctx.fillText('x₁', mapX + mapSize / 2, mapY + mapSize + 50);
-    // x₂ axis (vertical)
+    // Axis labels (inside the box, near the axes)
+    ctx.fillStyle = '#f8fafc';
+    ctx.font = 'bold 11px Inter, sans-serif';
+    // x₁ label (horizontal axis, bottom-right inside)
     ctx.textAlign = 'right';
-    ctx.fillText('0', mapX - 12, mapY + mapSize + 22);
-    ctx.fillText('1', mapX - 12, mapY + 22);
-    ctx.save();
-    ctx.translate(mapX - 20, mapY + 18 + mapSize / 2);
-    ctx.rotate(-Math.PI / 2);
-    ctx.textAlign = 'center';
-    ctx.fillText('x₂', 0, 0);
-    ctx.restore();
+    ctx.fillText('x₁', mapX + mapSize - 4, mapY + 18 + mapSize - 6);
+    // x₂ label (vertical axis, top-left inside)
+    ctx.textAlign = 'left';
+    ctx.fillText('x₂', mapX + 4, mapY + 18 + 12);
   }
 
   roundRect(ctx, x, y, w, h, r) {
