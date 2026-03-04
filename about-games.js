@@ -52,19 +52,12 @@ class DecisionBoundaryGame {
 
   initNetwork() {
     // Simple 2-layer network: 2 -> 16 -> 1
-    // Initialize with a smooth diagonal gradient (blue bottom-left to orange top-right)
-    this.w1 = this.zeroMatrix(2, 16);
+    // Initialize with tiny random weights for uniform grey appearance but trainable
+    // Small weights → outputs near 0.5 → neutral grey background
+    this.w1 = this.randomMatrix(2, 16, 0.01);
     this.b1 = this.zeroArray(16);
-    this.w2 = this.zeroMatrix(16, 1);
+    this.w2 = this.randomMatrix(16, 1, 0.01);
     this.b2 = this.zeroArray(1);
-
-    // Set up first hidden neuron to compute a diagonal gradient
-    // output = sigmoid(k*(x + y - 1)) gives smooth diagonal
-    const k = 4;
-    this.w1[0][0] = k;  // x weight
-    this.w1[1][0] = k;  // y weight
-    this.b1[0] = -k;    // bias to center
-    this.w2[0][0] = 1;  // output weight
   }
 
   zeroMatrix(rows, cols) {

@@ -441,18 +441,24 @@ class SkillTree {
         ctx.stroke();
       }
 
-      // Node label
+      // Node label - use smaller font to fit within nodes
       ctx.fillStyle = isHovered || isSelected ? this.colors.text : this.colors.textMuted;
-      ctx.font = `${isHovered || isSelected ? '600' : '500'} 11px Inter, sans-serif`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
 
-      // Word wrap for long names
-      const words = node.name.split(' ');
-      if (words.length > 1 && node.name.length > 10) {
-        ctx.fillText(words[0], node.px, node.py - 6);
-        ctx.fillText(words.slice(1).join(' '), node.px, node.py + 6);
+      // Word wrap for long names, with dynamic font sizing
+      const words = node.name.split(/[\s-]+/); // Split on space or hyphen
+      const maxWidth = (node.radius - 4) * 2; // Max text width inside node
+
+      if (words.length > 1) {
+        // Multi-word: use smaller font and stack
+        ctx.font = `${isHovered || isSelected ? '600' : '500'} 9px Inter, sans-serif`;
+        const line1 = words[0] + (node.name.includes('-') && words.length === 2 ? '-' : '');
+        const line2 = words.slice(1).join(' ');
+        ctx.fillText(line1, node.px, node.py - 5);
+        ctx.fillText(line2, node.px, node.py + 5);
       } else {
+        ctx.font = `${isHovered || isSelected ? '600' : '500'} 10px Inter, sans-serif`;
         ctx.fillText(node.name, node.px, node.py);
       }
     }
