@@ -182,7 +182,7 @@ class SkillTree {
     this.nodes.forEach(node => {
       node.px = padX + node.x * (this.width - 2 * padX);
       node.py = padY + node.y * (this.height - 2 * padY);
-      node.radius = 24 + (node.proficiency / 100) * 7; // Larger nodes
+      node.radius = 30 + (node.proficiency / 100) * 8; // Bigger nodes
     });
   }
 
@@ -451,14 +451,14 @@ class SkillTree {
       const maxWidth = (node.radius - 4) * 2; // Max text width inside node
 
       if (words.length > 1) {
-        // Multi-word: use smaller font and stack
-        ctx.font = `${isHovered || isSelected ? '600' : '500'} 9px Inter, sans-serif`;
+        // Multi-word: use bold font and stack
+        ctx.font = `${isHovered || isSelected ? '700' : '600'} 9px Inter, sans-serif`;
         const line1 = words[0] + (node.name.includes('-') && words.length === 2 ? '-' : '');
         const line2 = words.slice(1).join(' ');
         ctx.fillText(line1, node.px, node.py - 5);
         ctx.fillText(line2, node.px, node.py + 5);
       } else {
-        ctx.font = `${isHovered || isSelected ? '600' : '500'} 10px Inter, sans-serif`;
+        ctx.font = `${isHovered || isSelected ? '700' : '600'} 10px Inter, sans-serif`;
         ctx.fillText(node.name, node.px, node.py);
       }
     }
