@@ -51,9 +51,9 @@ class DecisionBoundaryGame {
   }
 
   initNetwork() {
-    // Simple 2-layer network: 2 -> 4 -> 1
-    // Smaller network = smoother decision boundaries
-    this.hiddenSize = 4;
+    // Simple 2-layer network: 2 -> 2 -> 1
+    // Only 2 hidden neurons = at most 2 hyperplanes = simple, clean boundaries
+    this.hiddenSize = 2;
     this.w1 = this.randomMatrix(2, this.hiddenSize);
     this.b1 = this.zeroArray(this.hiddenSize);
     this.w2 = this.randomMatrix(this.hiddenSize, 1);
