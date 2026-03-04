@@ -786,12 +786,12 @@ class NeuralNetworkGame {
     // Axis labels (outside heatmap but inside panel)
     ctx.fillStyle = '#f8fafc';
     ctx.font = 'bold 11px Inter, sans-serif';
-    // x₁ label (bottom-right, under the x-axis)
+    // x₁ label (slightly right of bottom-right corner)
+    ctx.textAlign = 'left';
+    ctx.fillText('x₁', mapX + mapSize + 4, mapY + 18 + mapSize + 4);
+    // x₂ label (slightly left of top-left corner)
     ctx.textAlign = 'right';
-    ctx.fillText('x₁', mapX + mapSize, mapY + 18 + mapSize + 14);
-    // x₂ label (top-left, left of the y-axis)
-    ctx.textAlign = 'right';
-    ctx.fillText('x₂', mapX - 4, mapY + 18 + 10);
+    ctx.fillText('x₂', mapX - 4, mapY + 18 + 4);
   }
 
   roundRect(ctx, x, y, w, h, r) {
