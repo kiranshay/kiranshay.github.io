@@ -1,5 +1,5 @@
 // Neural Network Mini-Game
-// Interactive XOR learning visualization with decision boundary
+// Interactive logic gate learning visualization with decision boundary
 
 class NeuralNetworkGame {
   constructor(canvasId) {
@@ -21,19 +21,90 @@ class NeuralNetworkGame {
     // Network architecture: 2 inputs, 6 hidden, 1 output
     this.layers = [2, 6, 1];
 
-    // XOR training data
-    this.trainingData = [
-      { input: [0, 0], target: 0 },
-      { input: [0, 1], target: 1 },
-      { input: [1, 0], target: 1 },
-      { input: [1, 1], target: 0 }
-    ];
+    // Current problem
+    this.currentProblem = 'XOR';
+
+    // All logic gate training data
+    this.problems = {
+      XOR: {
+        name: 'XOR',
+        fullName: 'XOR (Exclusive OR)',
+        data: [
+          { input: [0, 0], target: 0 },
+          { input: [0, 1], target: 1 },
+          { input: [1, 0], target: 1 },
+          { input: [1, 1], target: 0 }
+        ]
+      },
+      AND: {
+        name: 'AND',
+        fullName: 'AND Gate',
+        data: [
+          { input: [0, 0], target: 0 },
+          { input: [0, 1], target: 0 },
+          { input: [1, 0], target: 0 },
+          { input: [1, 1], target: 1 }
+        ]
+      },
+      OR: {
+        name: 'OR',
+        fullName: 'OR Gate',
+        data: [
+          { input: [0, 0], target: 0 },
+          { input: [0, 1], target: 1 },
+          { input: [1, 0], target: 1 },
+          { input: [1, 1], target: 1 }
+        ]
+      },
+      NAND: {
+        name: 'NAND',
+        fullName: 'NAND (NOT AND)',
+        data: [
+          { input: [0, 0], target: 1 },
+          { input: [0, 1], target: 1 },
+          { input: [1, 0], target: 1 },
+          { input: [1, 1], target: 0 }
+        ]
+      },
+      NOR: {
+        name: 'NOR',
+        fullName: 'NOR (NOT OR)',
+        data: [
+          { input: [0, 0], target: 1 },
+          { input: [0, 1], target: 0 },
+          { input: [1, 0], target: 0 },
+          { input: [1, 1], target: 0 }
+        ]
+      },
+      XNOR: {
+        name: 'XNOR',
+        fullName: 'XNOR (Equivalence)',
+        data: [
+          { input: [0, 0], target: 1 },
+          { input: [0, 1], target: 0 },
+          { input: [1, 0], target: 0 },
+          { input: [1, 1], target: 1 }
+        ]
+      }
+    };
+
+    // Set initial training data
+    this.trainingData = this.problems[this.currentProblem].data;
 
     this.initializeWeights();
     this.setupCanvas();
     this.setupEventListeners();
     this.startAnimation();
     this.updatePredictions();
+  }
+
+  setProblem(problemKey) {
+    if (!this.problems[problemKey]) return;
+
+    this.stopAutoTrain();
+    this.currentProblem = problemKey;
+    this.trainingData = this.problems[problemKey].data;
+    this.reset();
   }
 
   setupCanvas() {
@@ -554,7 +625,8 @@ class NeuralNetworkGame {
     ctx.fillStyle = '#f8fafc';
     ctx.font = 'bold 13px Inter, sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('XOR Truth Table', tableX + 80, tableY - 5);
+    const problemName = this.problems[this.currentProblem].name;
+    ctx.fillText(problemName + ' Truth Table', tableX + 80, tableY - 5);
 
     // Headers
     ctx.fillStyle = '#64748b';
@@ -790,10 +862,14 @@ class NeuralNetworkGame {
     const trainBtn = document.getElementById('train-btn');
     const resetBtn = document.getElementById('reset-btn');
     const autoBtn = document.getElementById('auto-train-btn');
+    const problemSelect = document.getElementById('problem-select');
 
     if (trainBtn) trainBtn.addEventListener('click', () => this.train());
     if (resetBtn) resetBtn.addEventListener('click', () => this.reset());
     if (autoBtn) autoBtn.addEventListener('click', () => this.toggleAutoTrain());
+    if (problemSelect) {
+      problemSelect.addEventListener('change', (e) => this.setProblem(e.target.value));
+    }
   }
 
   boostNeuron(layerIndex, neuronIndex) {

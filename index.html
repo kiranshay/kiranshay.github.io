@@ -169,12 +169,23 @@
     <section class="section section-alt">
       <div class="container">
         <h2 class="section-title">Interactive: Train a Neural Network</h2>
-        <p class="section-subtitle">Watch a neural network learn the XOR problem in real-time!</p>
+        <p class="section-subtitle">Watch a neural network learn logic gates in real-time!</p>
 
         <div class="game-container" id="neural-game">
           <canvas id="nn-canvas"></canvas>
           <div class="game-controls">
             <div class="game-info">
+              <div class="game-stat">
+                <span class="stat-label">Problem</span>
+                <select id="problem-select" class="problem-select">
+                  <option value="XOR">XOR</option>
+                  <option value="AND">AND</option>
+                  <option value="OR">OR</option>
+                  <option value="NAND">NAND</option>
+                  <option value="NOR">NOR</option>
+                  <option value="XNOR">XNOR</option>
+                </select>
+              </div>
               <div class="game-stat">
                 <span class="stat-label">Epoch</span>
                 <span class="stat-value" id="epoch-count">0</span>
