@@ -675,14 +675,17 @@ class NeuralNetworkGame {
 
   drawDecisionBoundary(ctx, width, height) {
     const mapSize = 120;
-    const mapX = width - 195;
+    const panelX = width - 195;
     const mapY = height - mapSize - 55;
     const resolution = 24;
     const cellSize = mapSize / resolution;
 
+    // Center the heatmap within the 180px panel
+    const mapX = panelX + 22;
+
     // Panel background
     ctx.fillStyle = 'rgba(15, 23, 42, 0.95)';
-    this.roundRect(ctx, mapX - 8, mapY - 30, 180, mapSize + 65, 12);
+    this.roundRect(ctx, panelX - 8, mapY - 30, 180, mapSize + 65, 12);
     ctx.fill();
     ctx.strokeStyle = '#334155';
     ctx.lineWidth = 1;
@@ -692,11 +695,11 @@ class NeuralNetworkGame {
     ctx.fillStyle = '#f8fafc';
     ctx.font = 'bold 13px Inter, sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('Decision Boundary', mapX + 80, mapY - 10);
+    ctx.fillText('Decision Boundary', panelX + 82, mapY - 10);
 
     ctx.font = '10px Inter, sans-serif';
     ctx.fillStyle = '#94a3b8';
-    ctx.fillText('Click to test any point!', mapX + 80, mapY + 5);
+    ctx.fillText('Click to test any point!', panelX + 82, mapY + 5);
 
     // Draw decision boundary heatmap
     for (let i = 0; i < resolution; i++) {
@@ -777,16 +780,27 @@ class NeuralNetworkGame {
       ctx.fillStyle = '#f8fafc';
       ctx.font = 'bold 11px JetBrains Mono, monospace';
       ctx.textAlign = 'center';
-      ctx.fillText(`(${this.testPoint.x.toFixed(2)}, ${this.testPoint.y.toFixed(2)}) → ${pred.toFixed(3)}`, mapX + mapSize / 2, mapY + mapSize + 35);
+      ctx.fillText(`(${this.testPoint.x.toFixed(2)}, ${this.testPoint.y.toFixed(2)}) → ${pred.toFixed(3)}`, panelX + 82, mapY + mapSize + 35);
     }
 
     // Axis labels
     ctx.fillStyle = '#94a3b8';
     ctx.font = '10px Inter, sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('0', mapX - 6, mapY + mapSize + 22);
-    ctx.fillText('1', mapX + mapSize + 6, mapY + mapSize + 22);
+    // x₁ axis (horizontal)
+    ctx.fillText('0', mapX - 8, mapY + mapSize + 24);
+    ctx.fillText('1', mapX + mapSize + 8, mapY + mapSize + 24);
     ctx.fillText('x₁', mapX + mapSize / 2, mapY + mapSize + 50);
+    // x₂ axis (vertical)
+    ctx.textAlign = 'right';
+    ctx.fillText('0', mapX - 12, mapY + mapSize + 22);
+    ctx.fillText('1', mapX - 12, mapY + 22);
+    ctx.save();
+    ctx.translate(mapX - 20, mapY + 18 + mapSize / 2);
+    ctx.rotate(-Math.PI / 2);
+    ctx.textAlign = 'center';
+    ctx.fillText('x₂', 0, 0);
+    ctx.restore();
   }
 
   roundRect(ctx, x, y, w, h, r) {
@@ -807,9 +821,10 @@ class NeuralNetworkGame {
       const x = (e.clientX - rect.left) * scaleX;
       const y = (e.clientY - rect.top) * scaleY;
 
-      // Check decision boundary area
+      // Check decision boundary area (centered in panel)
       const mapSize = 120;
-      const mapX = this.displayWidth - 195;
+      const panelX = this.displayWidth - 195;
+      const mapX = panelX + 22;
       const mapY = this.displayHeight - mapSize - 55;
 
       if (x >= mapX && x <= mapX + mapSize && y >= mapY + 18 && y <= mapY + 18 + mapSize) {
@@ -840,9 +855,10 @@ class NeuralNetworkGame {
       const x = (e.clientX - rect.left) * scaleX;
       const y = (e.clientY - rect.top) * scaleY;
 
-      // Check decision boundary click
+      // Check decision boundary click (centered in panel)
       const mapSize = 120;
-      const mapX = this.displayWidth - 195;
+      const panelX = this.displayWidth - 195;
+      const mapX = panelX + 22;
       const mapY = this.displayHeight - mapSize - 55;
 
       if (x >= mapX && x <= mapX + mapSize && y >= mapY + 18 && y <= mapY + 18 + mapSize) {
