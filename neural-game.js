@@ -590,11 +590,16 @@ class NeuralNetworkGame {
         // Labels
         if (layer === 0) {
           ctx.fillStyle = '#cbd5e1';
-          ctx.font = '11px Inter, sans-serif';
-          ctx.fillText(neuron === 0 ? 'x₁' : 'x₂', pos.x, pos.y + radius + 14);
+          ctx.font = 'bold 11px Inter, sans-serif';
+          // x₁ above, x₂ below
+          if (neuron === 0) {
+            ctx.fillText('x₁', pos.x, pos.y - radius - 10);
+          } else {
+            ctx.fillText('x₂', pos.x, pos.y + radius + 14);
+          }
         } else if (layer === this.layers.length - 1) {
           ctx.fillStyle = '#cbd5e1';
-          ctx.font = '11px Inter, sans-serif';
+          ctx.font = 'bold 11px Inter, sans-serif';
           ctx.fillText('ŷ', pos.x, pos.y + radius + 14);
         }
       }

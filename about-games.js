@@ -50,10 +50,10 @@ class DecisionBoundaryGame {
     this.height = 360;
   }
 
-  initNetwork() {
-    // Simple 2-layer network: 2 -> 2 -> 1
-    // Only 2 hidden neurons = at most 2 hyperplanes = simple, clean boundaries
-    this.hiddenSize = 2;
+  initNetwork(hiddenSize = 4) {
+    // Simple 2-layer network: 2 -> N -> 1
+    // Using tanh activation (no dying neurons, smooth boundaries)
+    this.hiddenSize = hiddenSize;
     this.w1 = this.randomMatrix(2, this.hiddenSize);
     this.b1 = this.zeroArray(this.hiddenSize);
     this.w2 = this.randomMatrix(this.hiddenSize, 1);
@@ -69,8 +69,8 @@ class DecisionBoundaryGame {
   }
 
   randomMatrix(rows, cols) {
-    // He initialization: weights ~ N(0, sqrt(2/fan_in))
-    const scale = Math.sqrt(2 / rows);
+    // Xavier initialization: weights ~ N(0, sqrt(1/fan_in)) - better for tanh
+    const scale = Math.sqrt(1 / rows);
     const m = [];
     for (let i = 0; i < rows; i++) {
       m[i] = [];
@@ -97,23 +97,24 @@ class DecisionBoundaryGame {
     return x * (1 - x);
   }
 
-  relu(x) {
-    return Math.max(0, x);
+  tanh(x) {
+    return Math.tanh(x);
   }
 
-  reluDerivative(x) {
-    return x > 0 ? 1 : 0;
+  tanhDerivative(x) {
+    // Derivative of tanh is 1 - tanh^2
+    return 1 - x * x;
   }
 
   forward(input) {
-    // Hidden layer with ReLU
+    // Hidden layer with tanh (no dying neurons, smooth gradients)
     this.hidden = [];
     for (let j = 0; j < this.hiddenSize; j++) {
       let sum = this.b1[j];
       for (let i = 0; i < 2; i++) {
         sum += input[i] * this.w1[i][j];
       }
-      this.hidden[j] = this.relu(sum);
+      this.hidden[j] = this.tanh(sum);
     }
 
     // Output layer with sigmoid
@@ -135,7 +136,7 @@ class DecisionBoundaryGame {
     const hiddenDelta = [];
     for (let j = 0; j < this.hiddenSize; j++) {
       const error = outputDelta * this.w2[j][0];
-      hiddenDelta[j] = error * this.reluDerivative(this.hidden[j]);
+      hiddenDelta[j] = error * this.tanhDerivative(this.hidden[j]);
     }
 
     // Update weights
@@ -450,6 +451,21 @@ class DecisionBoundaryGame {
     const classBBtn = document.getElementById('class-b-btn');
     if (classBBtn) {
       classBBtn.addEventListener('click', () => this.setClass(1));
+    }
+
+    // Hidden neurons slider
+    const neuronsSlider = document.getElementById('db-neurons-slider');
+    const neuronsLabel = document.getElementById('db-neurons-label');
+    if (neuronsSlider) {
+      neuronsSlider.addEventListener('input', (e) => {
+        const neurons = parseInt(e.target.value);
+        if (neuronsLabel) neuronsLabel.textContent = neurons;
+        // Reinitialize network with new size and reset training
+        this.initNetwork(neurons);
+        this.epoch = 0;
+        this.updateStats();
+        this.render();
+      });
     }
   }
 }
