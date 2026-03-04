@@ -363,10 +363,8 @@ class DecisionBoundaryGame {
   animate() {
     if (!this.isTraining) return;
 
-    // Train multiple steps per frame
-    for (let i = 0; i < 5; i++) {
-      this.trainStep();
-    }
+    // Train one step per frame for smoother visualization
+    this.trainStep();
     this.updateStats();
     this.render();
 
