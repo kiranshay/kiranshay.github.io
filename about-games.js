@@ -1,14 +1,14 @@
 /**
  * About Page Interactive Visualizations
- * - Gradient Descent Visualizer
+ * - Decision Boundary Painter
  * - Monte Carlo Pi Estimator
  */
 
 // ============================================
-// GRADIENT DESCENT VISUALIZER
+// DECISION BOUNDARY PAINTER
 // ============================================
 
-class GradientDescentGame {
+class DecisionBoundaryGame {
   constructor(canvasId) {
     this.canvas = document.getElementById(canvasId);
     if (!this.canvas) return;
@@ -16,22 +16,22 @@ class GradientDescentGame {
     this.ctx = this.canvas.getContext('2d');
     this.setupCanvas();
 
-    // Optimization parameters
-    this.learningRate = 0.1;
-    this.momentum = 0.0;
-    this.landscape = 'bowl'; // 'bowl', 'saddle', 'ravine'
+    // Data points: {x, y, label}
+    this.points = [];
+    this.currentClass = 0; // 0 = blue, 1 = orange
 
-    // Ball state
-    this.reset();
+    // Simple neural network (2 inputs -> 8 hidden -> 1 output)
+    this.initNetwork();
 
-    // Animation
-    this.isRunning = false;
+    // Training state
+    this.isTraining = false;
     this.animationId = null;
+    this.epoch = 0;
+    this.learningRate = 0.5;
 
-    // Setup controls
+    // Setup
     this.setupControls();
-
-    // Initial render
+    this.setupCanvasInteraction();
     this.render();
   }
 
@@ -41,98 +41,172 @@ class GradientDescentGame {
     const dpr = window.devicePixelRatio || 1;
 
     this.canvas.width = Math.min(400, rect.width - 40) * dpr;
-    this.canvas.height = 350 * dpr;
+    this.canvas.height = 320 * dpr;
     this.canvas.style.width = `${Math.min(400, rect.width - 40)}px`;
-    this.canvas.style.height = '350px';
+    this.canvas.style.height = '320px';
     this.ctx.scale(dpr, dpr);
 
     this.width = Math.min(400, rect.width - 40);
-    this.height = 350;
+    this.height = 320;
   }
 
-  reset() {
-    // Random starting position
-    this.x = (Math.random() - 0.5) * 3;
-    this.y = (Math.random() - 0.5) * 3;
-    this.vx = 0;
-    this.vy = 0;
-    this.path = [{x: this.x, y: this.y}];
-    this.iteration = 0;
-    this.loss = this.computeLoss(this.x, this.y);
-    this.updateStats();
-    this.render();
+  initNetwork() {
+    // Simple 2-layer network: 2 -> 8 -> 1
+    this.w1 = this.randomMatrix(2, 8);
+    this.b1 = this.randomArray(8);
+    this.w2 = this.randomMatrix(8, 1);
+    this.b2 = this.randomArray(1);
   }
 
-  computeLoss(x, y) {
-    switch (this.landscape) {
-      case 'bowl':
-        return x * x + y * y;
-      case 'saddle':
-        return x * x - y * y + 0.5 * (x * x + y * y);
-      case 'ravine':
-        return 0.5 * x * x + 5 * y * y;
-      default:
-        return x * x + y * y;
+  randomMatrix(rows, cols) {
+    const m = [];
+    for (let i = 0; i < rows; i++) {
+      m[i] = [];
+      for (let j = 0; j < cols; j++) {
+        m[i][j] = (Math.random() - 0.5) * 2;
+      }
     }
+    return m;
   }
 
-  computeGradient(x, y) {
-    switch (this.landscape) {
-      case 'bowl':
-        return { dx: 2 * x, dy: 2 * y };
-      case 'saddle':
-        return { dx: 2 * x + x, dy: -2 * y + y };
-      case 'ravine':
-        return { dx: x, dy: 10 * y };
-      default:
-        return { dx: 2 * x, dy: 2 * y };
+  randomArray(n) {
+    return Array(n).fill(0).map(() => (Math.random() - 0.5) * 0.5);
+  }
+
+  sigmoid(x) {
+    return 1 / (1 + Math.exp(-Math.max(-500, Math.min(500, x))));
+  }
+
+  sigmoidDerivative(x) {
+    return x * (1 - x);
+  }
+
+  relu(x) {
+    return Math.max(0, x);
+  }
+
+  reluDerivative(x) {
+    return x > 0 ? 1 : 0;
+  }
+
+  forward(input) {
+    // Hidden layer with ReLU
+    this.hidden = [];
+    for (let j = 0; j < 8; j++) {
+      let sum = this.b1[j];
+      for (let i = 0; i < 2; i++) {
+        sum += input[i] * this.w1[i][j];
+      }
+      this.hidden[j] = this.relu(sum);
     }
+
+    // Output layer with sigmoid
+    let output = this.b2[0];
+    for (let j = 0; j < 8; j++) {
+      output += this.hidden[j] * this.w2[j][0];
+    }
+    this.output = this.sigmoid(output);
+
+    return this.output;
   }
 
-  step() {
-    const grad = this.computeGradient(this.x, this.y);
+  backward(input, target) {
+    // Output error
+    const outputError = target - this.output;
+    const outputDelta = outputError * this.sigmoidDerivative(this.output);
 
-    // Momentum update
-    this.vx = this.momentum * this.vx - this.learningRate * grad.dx;
-    this.vy = this.momentum * this.vy - this.learningRate * grad.dy;
+    // Hidden error
+    const hiddenDelta = [];
+    for (let j = 0; j < 8; j++) {
+      const error = outputDelta * this.w2[j][0];
+      hiddenDelta[j] = error * this.reluDerivative(this.hidden[j]);
+    }
 
-    // Position update
-    this.x += this.vx;
-    this.y += this.vy;
+    // Update weights
+    for (let j = 0; j < 8; j++) {
+      this.w2[j][0] += this.learningRate * outputDelta * this.hidden[j];
+    }
+    this.b2[0] += this.learningRate * outputDelta;
 
-    // Clamp to bounds
-    this.x = Math.max(-4, Math.min(4, this.x));
-    this.y = Math.max(-4, Math.min(4, this.y));
+    for (let i = 0; i < 2; i++) {
+      for (let j = 0; j < 8; j++) {
+        this.w1[i][j] += this.learningRate * hiddenDelta[j] * input[i];
+      }
+    }
+    for (let j = 0; j < 8; j++) {
+      this.b1[j] += this.learningRate * hiddenDelta[j];
+    }
 
-    // Record path
-    this.path.push({x: this.x, y: this.y});
-    if (this.path.length > 200) this.path.shift();
+    return outputError * outputError;
+  }
 
-    this.iteration++;
-    this.loss = this.computeLoss(this.x, this.y);
-    this.updateStats();
+  trainStep() {
+    if (this.points.length < 2) return 0;
+
+    let totalLoss = 0;
+
+    // Shuffle and train on all points
+    const shuffled = [...this.points].sort(() => Math.random() - 0.5);
+
+    for (const point of shuffled) {
+      const input = [point.x, point.y];
+      this.forward(input);
+      totalLoss += this.backward(input, point.label);
+    }
+
+    this.epoch++;
+    return totalLoss / this.points.length;
+  }
+
+  computeAccuracy() {
+    if (this.points.length === 0) return 0;
+
+    let correct = 0;
+    for (const point of this.points) {
+      const pred = this.forward([point.x, point.y]);
+      const predLabel = pred > 0.5 ? 1 : 0;
+      if (predLabel === point.label) correct++;
+    }
+    return correct / this.points.length;
+  }
+
+  setupCanvasInteraction() {
+    this.canvas.addEventListener('click', (e) => {
+      const rect = this.canvas.getBoundingClientRect();
+      const scaleX = this.width / rect.width;
+      const scaleY = this.height / rect.height;
+
+      const clickX = (e.clientX - rect.left) * scaleX;
+      const clickY = (e.clientY - rect.top) * scaleY;
+
+      // Convert to normalized coordinates (0-1)
+      const padding = 20;
+      const plotSize = Math.min(this.width, this.height) - padding * 2;
+      const plotX = (this.width - plotSize) / 2;
+      const plotY = padding;
+
+      if (clickX >= plotX && clickX <= plotX + plotSize &&
+          clickY >= plotY && clickY <= plotY + plotSize) {
+        const x = (clickX - plotX) / plotSize;
+        const y = 1 - (clickY - plotY) / plotSize;
+
+        this.points.push({ x, y, label: this.currentClass });
+        this.updateStats();
+        this.render();
+      }
+    });
+
+    this.canvas.style.cursor = 'crosshair';
   }
 
   updateStats() {
-    const iterEl = document.getElementById('gd-iteration');
-    const lossEl = document.getElementById('gd-loss');
-    const posEl = document.getElementById('gd-position');
+    const epochEl = document.getElementById('db-epoch');
+    const pointsEl = document.getElementById('db-points');
+    const accEl = document.getElementById('db-accuracy');
 
-    if (iterEl) iterEl.textContent = this.iteration;
-    if (lossEl) lossEl.textContent = this.loss.toFixed(4);
-    if (posEl) posEl.textContent = `(${this.x.toFixed(2)}, ${this.y.toFixed(2)})`;
-  }
-
-  worldToScreen(wx, wy) {
-    const padding = 30;
-    const size = Math.min(this.width, this.height) - padding * 2;
-    const cx = this.width / 2;
-    const cy = this.height / 2;
-
-    return {
-      x: cx + (wx / 4) * (size / 2),
-      y: cy - (wy / 4) * (size / 2)
-    };
+    if (epochEl) epochEl.textContent = this.epoch;
+    if (pointsEl) pointsEl.textContent = this.points.length;
+    if (accEl) accEl.textContent = `${(this.computeAccuracy() * 100).toFixed(0)}%`;
   }
 
   render() {
@@ -144,172 +218,140 @@ class GradientDescentGame {
     ctx.fillStyle = '#0f172a';
     ctx.fillRect(0, 0, w, h);
 
-    // Draw contours
-    this.drawContours();
+    const padding = 20;
+    const plotSize = Math.min(w, h) - padding * 2;
+    const plotX = (w - plotSize) / 2;
+    const plotY = padding;
 
-    // Draw path
-    this.drawPath();
-
-    // Draw ball
-    this.drawBall();
-
-    // Draw minimum marker
-    const min = this.worldToScreen(0, 0);
-    ctx.beginPath();
-    ctx.arc(min.x, min.y, 6, 0, Math.PI * 2);
-    ctx.strokeStyle = '#22c55e';
-    ctx.lineWidth = 2;
-    ctx.stroke();
-    ctx.fillStyle = 'rgba(34, 197, 94, 0.3)';
-    ctx.fill();
-
-    // Labels
-    ctx.fillStyle = '#94a3b8';
-    ctx.font = '10px Inter, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('Minimum', min.x, min.y + 20);
-  }
-
-  drawContours() {
-    const ctx = this.ctx;
-    const resolution = 50;
-    const padding = 30;
-    const size = Math.min(this.width, this.height) - padding * 2;
-    const startX = (this.width - size) / 2;
-    const startY = (this.height - size) / 2;
-    const cellSize = size / resolution;
+    // Draw decision boundary heatmap
+    const resolution = 40;
+    const cellSize = plotSize / resolution;
 
     for (let i = 0; i < resolution; i++) {
       for (let j = 0; j < resolution; j++) {
-        const wx = ((i / resolution) - 0.5) * 8;
-        const wy = ((j / resolution) - 0.5) * 8;
-        const loss = this.computeLoss(wx, wy);
+        const x = (i + 0.5) / resolution;
+        const y = (j + 0.5) / resolution;
+        const pred = this.forward([x, y]);
 
-        // Color based on loss
-        const maxLoss = 20;
-        const t = Math.min(1, loss / maxLoss);
+        // Interpolate between blue and orange based on prediction
+        const t = pred;
+        // Blue (class 0): #3b82f6, Orange (class 1): #f97316
+        const r = Math.floor(59 + t * (249 - 59));
+        const g = Math.floor(130 + t * (115 - 130));
+        const b = Math.floor(246 + t * (22 - 246));
 
-        // Purple to dark gradient
-        const r = Math.floor(30 + t * 70);
-        const g = Math.floor(20 + t * 20);
-        const b = Math.floor(60 + t * 80);
-
-        ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
-        ctx.fillRect(startX + i * cellSize, startY + j * cellSize, cellSize + 1, cellSize + 1);
+        ctx.fillStyle = `rgba(${r}, ${g}, ${b}, 0.4)`;
+        ctx.fillRect(
+          plotX + i * cellSize,
+          plotY + (resolution - 1 - j) * cellSize,
+          cellSize + 1,
+          cellSize + 1
+        );
       }
     }
 
-    // Draw contour lines
-    const levels = [0.5, 1, 2, 4, 8, 16];
-    ctx.strokeStyle = 'rgba(148, 163, 184, 0.3)';
-    ctx.lineWidth = 1;
+    // Draw decision boundary line (pred = 0.5)
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([4, 4]);
+    ctx.beginPath();
 
-    for (const level of levels) {
-      ctx.beginPath();
-      for (let angle = 0; angle <= Math.PI * 2; angle += 0.05) {
-        let wx, wy;
+    let firstPoint = true;
+    for (let i = 0; i <= resolution; i++) {
+      for (let j = 0; j <= resolution; j++) {
+        const x = i / resolution;
+        const y = j / resolution;
+        const pred = this.forward([x, y]);
 
-        if (this.landscape === 'bowl') {
-          const r = Math.sqrt(level);
-          wx = r * Math.cos(angle);
-          wy = r * Math.sin(angle);
-        } else if (this.landscape === 'ravine') {
-          const a = Math.sqrt(level / 0.5);
-          const b = Math.sqrt(level / 5);
-          wx = a * Math.cos(angle);
-          wy = b * Math.sin(angle);
-        } else {
-          // Skip for saddle - more complex
-          continue;
-        }
+        if (Math.abs(pred - 0.5) < 0.05) {
+          const sx = plotX + x * plotSize;
+          const sy = plotY + (1 - y) * plotSize;
 
-        const screen = this.worldToScreen(wx, wy);
-        if (angle === 0) {
-          ctx.moveTo(screen.x, screen.y);
-        } else {
-          ctx.lineTo(screen.x, screen.y);
+          if (firstPoint) {
+            ctx.moveTo(sx, sy);
+            firstPoint = false;
+          } else {
+            ctx.lineTo(sx, sy);
+          }
         }
       }
-      ctx.closePath();
+    }
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Draw plot border
+    ctx.strokeStyle = '#475569';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(plotX, plotY, plotSize, plotSize);
+
+    // Draw data points
+    for (const point of this.points) {
+      const sx = plotX + point.x * plotSize;
+      const sy = plotY + (1 - point.y) * plotSize;
+
+      // Outer ring
+      ctx.beginPath();
+      ctx.arc(sx, sy, 10, 0, Math.PI * 2);
+      ctx.fillStyle = point.label === 0 ? '#3b82f6' : '#f97316';
+      ctx.fill();
+
+      // Inner circle
+      ctx.beginPath();
+      ctx.arc(sx, sy, 6, 0, Math.PI * 2);
+      ctx.fillStyle = point.label === 0 ? '#60a5fa' : '#fb923c';
+      ctx.fill();
+
+      // Border
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 2;
       ctx.stroke();
     }
-  }
 
-  drawPath() {
-    if (this.path.length < 2) return;
+    // Instructions
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '11px Inter, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Click to add points, then train!', w / 2, h - 8);
 
-    const ctx = this.ctx;
+    // Legend
+    ctx.textAlign = 'left';
+    ctx.fillStyle = '#3b82f6';
     ctx.beginPath();
-
-    const start = this.worldToScreen(this.path[0].x, this.path[0].y);
-    ctx.moveTo(start.x, start.y);
-
-    for (let i = 1; i < this.path.length; i++) {
-      const p = this.worldToScreen(this.path[i].x, this.path[i].y);
-      ctx.lineTo(p.x, p.y);
-    }
-
-    ctx.strokeStyle = 'rgba(251, 191, 36, 0.8)';
-    ctx.lineWidth = 2;
-    ctx.stroke();
-
-    // Draw path points
-    for (let i = 0; i < this.path.length; i += 3) {
-      const p = this.worldToScreen(this.path[i].x, this.path[i].y);
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(251, 191, 36, 0.6)';
-      ctx.fill();
-    }
-  }
-
-  drawBall() {
-    const ctx = this.ctx;
-    const pos = this.worldToScreen(this.x, this.y);
-
-    // Glow
-    const gradient = ctx.createRadialGradient(pos.x, pos.y, 0, pos.x, pos.y, 20);
-    gradient.addColorStop(0, 'rgba(251, 191, 36, 0.4)');
-    gradient.addColorStop(1, 'rgba(251, 191, 36, 0)');
-    ctx.fillStyle = gradient;
-    ctx.beginPath();
-    ctx.arc(pos.x, pos.y, 20, 0, Math.PI * 2);
+    ctx.arc(plotX + 10, plotY + plotSize + 20, 6, 0, Math.PI * 2);
     ctx.fill();
+    ctx.fillStyle = '#94a3b8';
+    ctx.fillText('Class A', plotX + 20, plotY + plotSize + 24);
 
-    // Ball
+    ctx.fillStyle = '#f97316';
     ctx.beginPath();
-    ctx.arc(pos.x, pos.y, 8, 0, Math.PI * 2);
-    ctx.fillStyle = '#fbbf24';
+    ctx.arc(plotX + 80, plotY + plotSize + 20, 6, 0, Math.PI * 2);
     ctx.fill();
-    ctx.strokeStyle = '#f59e0b';
-    ctx.lineWidth = 2;
-    ctx.stroke();
+    ctx.fillStyle = '#94a3b8';
+    ctx.fillText('Class B', plotX + 90, plotY + plotSize + 24);
   }
 
   animate() {
-    if (!this.isRunning) return;
+    if (!this.isTraining) return;
 
-    this.step();
-    this.render();
-
-    // Stop if converged
-    if (this.loss < 0.0001) {
-      this.stop();
-      return;
+    // Train multiple steps per frame
+    for (let i = 0; i < 5; i++) {
+      this.trainStep();
     }
+    this.updateStats();
+    this.render();
 
     this.animationId = requestAnimationFrame(() => this.animate());
   }
 
   start() {
-    if (this.isRunning) return;
-    this.isRunning = true;
+    if (this.isTraining || this.points.length < 2) return;
+    this.isTraining = true;
     this.animate();
     this.updateButton();
   }
 
   stop() {
-    this.isRunning = false;
+    this.isTraining = false;
     if (this.animationId) {
       cancelAnimationFrame(this.animationId);
     }
@@ -317,7 +359,7 @@ class GradientDescentGame {
   }
 
   toggle() {
-    if (this.isRunning) {
+    if (this.isTraining) {
       this.stop();
     } else {
       this.start();
@@ -325,79 +367,53 @@ class GradientDescentGame {
   }
 
   updateButton() {
-    const btn = document.getElementById('gd-toggle-btn');
+    const btn = document.getElementById('db-toggle-btn');
     if (btn) {
-      btn.innerHTML = this.isRunning
+      btn.innerHTML = this.isTraining
         ? '<i data-lucide="pause"></i> Pause'
-        : '<i data-lucide="play"></i> Run';
+        : '<i data-lucide="play"></i> Train';
       if (typeof lucide !== 'undefined') lucide.createIcons();
     }
   }
 
-  singleStep() {
-    this.step();
+  setClass(classLabel) {
+    this.currentClass = classLabel;
+    document.getElementById('class-a-btn')?.classList.toggle('active', classLabel === 0);
+    document.getElementById('class-b-btn')?.classList.toggle('active', classLabel === 1);
+  }
+
+  reset() {
+    this.stop();
+    this.points = [];
+    this.epoch = 0;
+    this.initNetwork();
+    this.updateStats();
     this.render();
-  }
-
-  setLearningRate(value) {
-    this.learningRate = value;
-    document.getElementById('lr-value').textContent = value.toFixed(2);
-  }
-
-  setMomentum(value) {
-    this.momentum = value;
-    document.getElementById('momentum-value').textContent = value.toFixed(2);
-  }
-
-  setLandscape(type) {
-    this.landscape = type;
-    this.reset();
   }
 
   setupControls() {
     // Toggle button
-    const toggleBtn = document.getElementById('gd-toggle-btn');
+    const toggleBtn = document.getElementById('db-toggle-btn');
     if (toggleBtn) {
       toggleBtn.addEventListener('click', () => this.toggle());
     }
 
-    // Step button
-    const stepBtn = document.getElementById('gd-step-btn');
-    if (stepBtn) {
-      stepBtn.addEventListener('click', () => this.singleStep());
-    }
-
     // Reset button
-    const resetBtn = document.getElementById('gd-reset-btn');
+    const resetBtn = document.getElementById('db-reset-btn');
     if (resetBtn) {
-      resetBtn.addEventListener('click', () => {
-        this.stop();
-        this.reset();
-      });
+      resetBtn.addEventListener('click', () => this.reset());
     }
 
-    // Learning rate slider
-    const lrSlider = document.getElementById('lr-slider');
-    if (lrSlider) {
-      lrSlider.addEventListener('input', (e) => {
-        this.setLearningRate(parseFloat(e.target.value));
-      });
+    // Class selection buttons
+    const classABtn = document.getElementById('class-a-btn');
+    if (classABtn) {
+      classABtn.addEventListener('click', () => this.setClass(0));
+      classABtn.classList.add('active');
     }
 
-    // Momentum slider
-    const momentumSlider = document.getElementById('momentum-slider');
-    if (momentumSlider) {
-      momentumSlider.addEventListener('input', (e) => {
-        this.setMomentum(parseFloat(e.target.value));
-      });
-    }
-
-    // Landscape select
-    const landscapeSelect = document.getElementById('landscape-select');
-    if (landscapeSelect) {
-      landscapeSelect.addEventListener('change', (e) => {
-        this.setLandscape(e.target.value);
-      });
+    const classBBtn = document.getElementById('class-b-btn');
+    if (classBBtn) {
+      classBBtn.addEventListener('click', () => this.setClass(1));
     }
   }
 }
@@ -436,13 +452,13 @@ class MonteCarloPiGame {
     const dpr = window.devicePixelRatio || 1;
 
     this.canvas.width = Math.min(400, rect.width - 40) * dpr;
-    this.canvas.height = 350 * dpr;
+    this.canvas.height = 320 * dpr;
     this.canvas.style.width = `${Math.min(400, rect.width - 40)}px`;
-    this.canvas.style.height = '350px';
+    this.canvas.style.height = '320px';
     this.ctx.scale(dpr, dpr);
 
     this.width = Math.min(400, rect.width - 40);
-    this.height = 350;
+    this.height = 320;
   }
 
   reset() {
@@ -509,8 +525,8 @@ class MonteCarloPiGame {
     ctx.fillRect(0, 0, w, h);
 
     // Draw the square and circle
-    const padding = 30;
-    const squareSize = Math.min(w - padding * 2, h - 80);
+    const padding = 25;
+    const squareSize = Math.min(w - padding * 2, h - 75);
     const cx = w / 2;
     const cy = padding + squareSize / 2;
 
@@ -544,15 +560,15 @@ class MonteCarloPiGame {
     }
 
     // Draw formula and explanation
-    const formulaY = cy + squareSize/2 + 25;
+    const formulaY = cy + squareSize/2 + 22;
     ctx.fillStyle = '#cbd5e1';
-    ctx.font = '12px JetBrains Mono, monospace';
+    ctx.font = '11px JetBrains Mono, monospace';
     ctx.textAlign = 'center';
     ctx.fillText('π ≈ 4 × (points in circle) / (total points)', cx, formulaY);
 
     ctx.fillStyle = '#94a3b8';
-    ctx.font = '11px Inter, sans-serif';
-    ctx.fillText(`π ≈ 4 × ${this.insideCount} / ${this.totalCount} = ${this.piEstimate.toFixed(4)}`, cx, formulaY + 18);
+    ctx.font = '10px Inter, sans-serif';
+    ctx.fillText(`π ≈ 4 × ${this.insideCount} / ${this.totalCount} = ${this.piEstimate.toFixed(4)}`, cx, formulaY + 15);
 
     // Legend
     ctx.font = '10px Inter, sans-serif';
@@ -560,17 +576,17 @@ class MonteCarloPiGame {
 
     ctx.fillStyle = '#22c55e';
     ctx.beginPath();
-    ctx.arc(cx - 60, formulaY + 38, 4, 0, Math.PI * 2);
+    ctx.arc(cx - 55, formulaY + 32, 4, 0, Math.PI * 2);
     ctx.fill();
     ctx.fillStyle = '#94a3b8';
-    ctx.fillText('Inside', cx - 52, formulaY + 42);
+    ctx.fillText('Inside', cx - 47, formulaY + 36);
 
     ctx.fillStyle = '#ef4444';
     ctx.beginPath();
-    ctx.arc(cx + 20, formulaY + 38, 4, 0, Math.PI * 2);
+    ctx.arc(cx + 15, formulaY + 32, 4, 0, Math.PI * 2);
     ctx.fill();
     ctx.fillStyle = '#94a3b8';
-    ctx.fillText('Outside', cx + 28, formulaY + 42);
+    ctx.fillText('Outside', cx + 23, formulaY + 36);
   }
 
   animate() {
@@ -672,9 +688,9 @@ class MonteCarloPiGame {
 // ============================================
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Initialize Gradient Descent Visualizer
-  if (document.getElementById('gd-canvas')) {
-    window.gradientDescentGame = new GradientDescentGame('gd-canvas');
+  // Initialize Decision Boundary Painter
+  if (document.getElementById('db-canvas')) {
+    window.decisionBoundaryGame = new DecisionBoundaryGame('db-canvas');
   }
 
   // Initialize Monte Carlo Pi Estimator
