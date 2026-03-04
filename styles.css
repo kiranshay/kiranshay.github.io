@@ -2505,7 +2505,7 @@ img {
 
 /* Reduce padding on skills page sections */
 .section.section-alt + .section {
-  padding-top: var(--spacing-8);
+  padding-top: var(--spacing-4);
 }
 
 .skill-tree-container {

@@ -163,8 +163,8 @@ class SkillTree {
     const rect = container.getBoundingClientRect();
     const dpr = window.devicePixelRatio || 1;
 
-    // Set canvas size - more compact height
-    const canvasHeight = 420;
+    // Set canvas size - larger for better spacing
+    const canvasHeight = 520;
     this.canvas.width = rect.width * dpr;
     this.canvas.height = canvasHeight * dpr;
     this.canvas.style.width = rect.width + 'px';
@@ -175,14 +175,14 @@ class SkillTree {
     this.height = canvasHeight;
 
     // Padding to keep nodes away from edges
-    const padX = 40;
-    const padY = 35;
+    const padX = 45;
+    const padY = 40;
 
     // Convert relative positions to actual pixel positions with padding
     this.nodes.forEach(node => {
       node.px = padX + node.x * (this.width - 2 * padX);
       node.py = padY + node.y * (this.height - 2 * padY);
-      node.radius = 22 + (node.proficiency / 100) * 6; // Slightly smaller nodes
+      node.radius = 24 + (node.proficiency / 100) * 7; // Larger nodes
     });
   }
 
