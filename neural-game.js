@@ -528,7 +528,7 @@ class NeuralNetworkGame {
     const layerLabels = ['Input', 'Hidden', 'Output'];
     for (let layer = 0; layer < this.layers.length; layer++) {
       const firstNeuron = this.getNeuronPosition(layer, 0);
-      ctx.fillStyle = '#64748b';
+      ctx.fillStyle = '#cbd5e1';
       ctx.font = 'bold 11px Inter, sans-serif';
       ctx.textAlign = 'center';
       ctx.fillText(layerLabels[layer], firstNeuron.x, 20);
@@ -589,11 +589,11 @@ class NeuralNetworkGame {
 
         // Labels
         if (layer === 0) {
-          ctx.fillStyle = '#94a3b8';
+          ctx.fillStyle = '#cbd5e1';
           ctx.font = '11px Inter, sans-serif';
           ctx.fillText(neuron === 0 ? 'x₁' : 'x₂', pos.x, pos.y + radius + 14);
         } else if (layer === this.layers.length - 1) {
-          ctx.fillStyle = '#94a3b8';
+          ctx.fillStyle = '#cbd5e1';
           ctx.font = '11px Inter, sans-serif';
           ctx.fillText('ŷ', pos.x, pos.y + radius + 14);
         }
@@ -629,7 +629,7 @@ class NeuralNetworkGame {
     ctx.fillText(problemName + ' Truth Table', tableX + 80, tableY - 5);
 
     // Headers
-    ctx.fillStyle = '#64748b';
+    ctx.fillStyle = '#94a3b8';
     ctx.font = '11px Inter, sans-serif';
     const headers = ['x₁', 'x₂', 'Target', 'Pred'];
     headers.forEach((h, i) => {
@@ -690,7 +690,7 @@ class NeuralNetworkGame {
     ctx.fillText('Decision Boundary', mapX + 80, mapY - 10);
 
     ctx.font = '10px Inter, sans-serif';
-    ctx.fillStyle = '#64748b';
+    ctx.fillStyle = '#94a3b8';
     ctx.fillText('Click to test any point!', mapX + 80, mapY + 5);
 
     // Draw decision boundary heatmap
@@ -776,7 +776,7 @@ class NeuralNetworkGame {
     }
 
     // Axis labels
-    ctx.fillStyle = '#64748b';
+    ctx.fillStyle = '#94a3b8';
     ctx.font = '10px Inter, sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText('0', mapX - 6, mapY + mapSize + 22);
