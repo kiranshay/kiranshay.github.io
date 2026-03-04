@@ -69,11 +69,11 @@ class NeuralNetworkGame {
       for (let j = 0; j < this.layers[i + 1]; j++) {
         const neuronWeights = [];
         for (let k = 0; k < this.layers[i]; k++) {
-          const scale = Math.sqrt(2.0 / (this.layers[i] + this.layers[i + 1]));
-          neuronWeights.push((Math.random() - 0.5) * 2 * scale);
+          // Larger initial weights help XOR converge faster
+          neuronWeights.push((Math.random() - 0.5) * 2.0);
         }
         layerWeights.push(neuronWeights);
-        layerBiases.push((Math.random() - 0.5) * 0.5);
+        layerBiases.push((Math.random() - 0.5) * 1.0);
       }
 
       this.weights.push(layerWeights);
@@ -112,14 +112,43 @@ class NeuralNetworkGame {
   }
 
   train() {
-    const learningRate = 1.0;
+    const learningRate = 3.0;
     let totalLoss = 0;
     let correct = 0;
 
-    const shuffled = [...this.trainingData].sort(() => Math.random() - 0.5);
+    // Initialize gradient accumulators
+    const weightGrads = [
+      Array(this.layers[1]).fill(null).map(() => Array(this.layers[0]).fill(0)),
+      [Array(this.layers[1]).fill(0)]
+    ];
+    const biasGrads = [
+      Array(this.layers[1]).fill(0),
+      [0]
+    ];
 
-    for (const data of shuffled) {
-      const output = this.forward(data.input);
+    // Process each training sample
+    for (const data of this.trainingData) {
+      // Forward pass - store activations locally
+      const inputActs = data.input.slice();
+      const hiddenActs = [];
+
+      // Input to hidden
+      for (let h = 0; h < this.layers[1]; h++) {
+        let sum = this.biases[0][h];
+        for (let i = 0; i < this.layers[0]; i++) {
+          sum += inputActs[i] * this.weights[0][h][i];
+        }
+        hiddenActs.push(this.sigmoid(sum));
+      }
+
+      // Hidden to output
+      let outputSum = this.biases[1][0];
+      for (let h = 0; h < this.layers[1]; h++) {
+        outputSum += hiddenActs[h] * this.weights[1][0][h];
+      }
+      const output = this.sigmoid(outputSum);
+
+      // Compute error and loss
       const error = data.target - output;
       totalLoss += error * error;
 
@@ -127,27 +156,44 @@ class NeuralNetworkGame {
         correct++;
       }
 
-      const outputDelta = error * this.sigmoidDerivative(output);
+      // Backpropagation
+      const outputDelta = error * output * (1 - output);
 
-      // Hidden to output
+      // Hidden to output gradients
       for (let h = 0; h < this.layers[1]; h++) {
-        this.weights[1][0][h] += learningRate * outputDelta * this.activations[1][h];
+        weightGrads[1][0][h] += outputDelta * hiddenActs[h];
       }
-      this.biases[1][0] += learningRate * outputDelta;
+      biasGrads[1][0] += outputDelta;
 
-      // Input to hidden
+      // Input to hidden gradients
       for (let h = 0; h < this.layers[1]; h++) {
-        const hiddenDelta = outputDelta * this.weights[1][0][h] * this.sigmoidDerivative(this.activations[1][h]);
+        const hiddenDelta = outputDelta * this.weights[1][0][h] * hiddenActs[h] * (1 - hiddenActs[h]);
         for (let i = 0; i < this.layers[0]; i++) {
-          this.weights[0][h][i] += learningRate * hiddenDelta * this.activations[0][i];
+          weightGrads[0][h][i] += hiddenDelta * inputActs[i];
         }
-        this.biases[0][h] += learningRate * hiddenDelta;
+        biasGrads[0][h] += hiddenDelta;
       }
     }
 
+    // Apply accumulated gradients
+    const n = this.trainingData.length;
+    for (let h = 0; h < this.layers[1]; h++) {
+      for (let i = 0; i < this.layers[0]; i++) {
+        this.weights[0][h][i] += learningRate * weightGrads[0][h][i] / n;
+      }
+      this.biases[0][h] += learningRate * biasGrads[0][h] / n;
+    }
+    for (let h = 0; h < this.layers[1]; h++) {
+      this.weights[1][0][h] += learningRate * weightGrads[1][0][h] / n;
+    }
+    this.biases[1][0] += learningRate * biasGrads[1][0] / n;
+
     this.epoch++;
-    this.loss = totalLoss / this.trainingData.length;
-    this.accuracy = (correct / this.trainingData.length) * 100;
+    this.loss = totalLoss / n;
+    this.accuracy = (correct / n) * 100;
+
+    // Update visualization activations with last sample for display
+    this.forward(this.trainingData[0].input);
 
     this.updatePredictions();
     this.updateDisplay();
@@ -264,7 +310,7 @@ class NeuralNetworkGame {
 
   getNeuronPosition(layer, neuron) {
     const padding = 80;
-    const rightPadding = 240;
+    const rightPadding = 280;
     const availableWidth = this.displayWidth - padding - rightPadding;
     const layerSpacing = availableWidth / (this.layers.length - 1);
     const x = padding + layer * layerSpacing;
@@ -491,14 +537,14 @@ class NeuralNetworkGame {
   }
 
   drawXORTable(ctx, width, height) {
-    const tableX = width - 210;
+    const tableX = width - 195;
     const tableY = 35;
     const cellW = 42;
     const cellH = 34;
 
     // Panel background
     ctx.fillStyle = 'rgba(15, 23, 42, 0.95)';
-    this.roundRect(ctx, tableX - 12, tableY - 25, 195, 185, 12);
+    this.roundRect(ctx, tableX - 8, tableY - 25, 180, 185, 12);
     ctx.fill();
     ctx.strokeStyle = '#334155';
     ctx.lineWidth = 1;
@@ -508,14 +554,14 @@ class NeuralNetworkGame {
     ctx.fillStyle = '#f8fafc';
     ctx.font = 'bold 13px Inter, sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('XOR Truth Table', tableX + 85, tableY - 5);
+    ctx.fillText('XOR Truth Table', tableX + 80, tableY - 5);
 
     // Headers
     ctx.fillStyle = '#64748b';
     ctx.font = '11px Inter, sans-serif';
     const headers = ['x₁', 'x₂', 'Target', 'Pred'];
     headers.forEach((h, i) => {
-      ctx.fillText(h, tableX + i * cellW + 18, tableY + 20);
+      ctx.fillText(h, tableX + i * cellW + 15, tableY + 20);
     });
 
     // Data rows
@@ -526,40 +572,40 @@ class NeuralNetworkGame {
 
       // Row background
       ctx.fillStyle = correct ? 'rgba(34, 197, 94, 0.15)' : 'rgba(239, 68, 68, 0.1)';
-      this.roundRect(ctx, tableX - 5, y - 12, 180, cellH - 2, 6);
+      this.roundRect(ctx, tableX - 2, y - 12, 165, cellH - 2, 6);
       ctx.fill();
 
       // Values
       ctx.fillStyle = '#e2e8f0';
       ctx.font = '12px JetBrains Mono, monospace';
       ctx.textAlign = 'center';
-      ctx.fillText(data.input[0].toString(), tableX + 18, y + 5);
-      ctx.fillText(data.input[1].toString(), tableX + 18 + cellW, y + 5);
+      ctx.fillText(data.input[0].toString(), tableX + 15, y + 5);
+      ctx.fillText(data.input[1].toString(), tableX + 15 + cellW, y + 5);
 
       // Target
       ctx.fillStyle = data.target === 1 ? '#4ade80' : '#f87171';
-      ctx.fillText(data.target.toString(), tableX + 18 + cellW * 2, y + 5);
+      ctx.fillText(data.target.toString(), tableX + 15 + cellW * 2, y + 5);
 
       // Prediction
       ctx.fillStyle = correct ? '#4ade80' : '#f87171';
-      ctx.fillText(pred.toFixed(2), tableX + 18 + cellW * 3, y + 5);
+      ctx.fillText(pred.toFixed(2), tableX + 15 + cellW * 3, y + 5);
 
       // Status icon
       ctx.font = 'bold 14px sans-serif';
-      ctx.fillText(correct ? '✓' : '✗', tableX + 177, y + 5);
+      ctx.fillText(correct ? '✓' : '✗', tableX + 162, y + 5);
     });
   }
 
   drawDecisionBoundary(ctx, width, height) {
     const mapSize = 120;
-    const mapX = width - 210;
+    const mapX = width - 195;
     const mapY = height - mapSize - 55;
     const resolution = 24;
     const cellSize = mapSize / resolution;
 
     // Panel background
     ctx.fillStyle = 'rgba(15, 23, 42, 0.95)';
-    this.roundRect(ctx, mapX - 12, mapY - 30, 195, mapSize + 65, 12);
+    this.roundRect(ctx, mapX - 8, mapY - 30, 180, mapSize + 65, 12);
     ctx.fill();
     ctx.strokeStyle = '#334155';
     ctx.lineWidth = 1;
@@ -569,11 +615,11 @@ class NeuralNetworkGame {
     ctx.fillStyle = '#f8fafc';
     ctx.font = 'bold 13px Inter, sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('Decision Boundary', mapX + 85, mapY - 10);
+    ctx.fillText('Decision Boundary', mapX + 80, mapY - 10);
 
     ctx.font = '10px Inter, sans-serif';
     ctx.fillStyle = '#64748b';
-    ctx.fillText('Click to test any point!', mapX + 85, mapY + 5);
+    ctx.fillText('Click to test any point!', mapX + 80, mapY + 5);
 
     // Draw decision boundary heatmap
     for (let i = 0; i < resolution; i++) {
@@ -661,8 +707,8 @@ class NeuralNetworkGame {
     ctx.fillStyle = '#64748b';
     ctx.font = '10px Inter, sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('0', mapX - 8, mapY + mapSize + 22);
-    ctx.fillText('1', mapX + mapSize + 8, mapY + mapSize + 22);
+    ctx.fillText('0', mapX - 6, mapY + mapSize + 22);
+    ctx.fillText('1', mapX + mapSize + 6, mapY + mapSize + 22);
     ctx.fillText('x₁', mapX + mapSize / 2, mapY + mapSize + 50);
   }
 
@@ -686,7 +732,7 @@ class NeuralNetworkGame {
 
       // Check decision boundary area
       const mapSize = 120;
-      const mapX = this.displayWidth - 210;
+      const mapX = this.displayWidth - 195;
       const mapY = this.displayHeight - mapSize - 55;
 
       if (x >= mapX && x <= mapX + mapSize && y >= mapY + 18 && y <= mapY + 18 + mapSize) {
@@ -719,7 +765,7 @@ class NeuralNetworkGame {
 
       // Check decision boundary click
       const mapSize = 120;
-      const mapX = this.displayWidth - 210;
+      const mapX = this.displayWidth - 195;
       const mapY = this.displayHeight - mapSize - 55;
 
       if (x >= mapX && x <= mapX + mapSize && y >= mapY + 18 && y <= mapY + 18 + mapSize) {
