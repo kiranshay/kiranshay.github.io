@@ -170,6 +170,15 @@ class DecisionBoundaryGame {
     return correct / this.points.length;
   }
 
+  getPlotDimensions() {
+    // Shared calculation for consistency between click handling and rendering
+    const padding = 25;
+    const plotSize = Math.min(this.width, this.height - 60) - padding * 2;
+    const plotX = (this.width - plotSize) / 2;
+    const plotY = padding;
+    return { padding, plotSize, plotX, plotY };
+  }
+
   setupCanvasInteraction() {
     this.canvas.addEventListener('click', (e) => {
       const rect = this.canvas.getBoundingClientRect();
@@ -180,10 +189,7 @@ class DecisionBoundaryGame {
       const clickY = (e.clientY - rect.top) * scaleY;
 
       // Convert to normalized coordinates (0-1)
-      const padding = 20;
-      const plotSize = Math.min(this.width, this.height) - padding * 2;
-      const plotX = (this.width - plotSize) / 2;
-      const plotY = padding;
+      const { plotSize, plotX, plotY } = this.getPlotDimensions();
 
       if (clickX >= plotX && clickX <= plotX + plotSize &&
           clickY >= plotY && clickY <= plotY + plotSize) {
@@ -218,10 +224,7 @@ class DecisionBoundaryGame {
     ctx.fillStyle = '#0f172a';
     ctx.fillRect(0, 0, w, h);
 
-    const padding = 25;
-    const plotSize = Math.min(w, h - 60) - padding * 2;
-    const plotX = (w - plotSize) / 2;
-    const plotY = padding;
+    const { plotSize, plotX, plotY } = this.getPlotDimensions();
 
     // Draw decision boundary heatmap
     const resolution = 40;
@@ -341,8 +344,9 @@ class DecisionBoundaryGame {
     this.updateStats();
     this.render();
 
-    // Auto-stop when 100% accuracy is achieved
-    if (this.computeAccuracy() === 1.0 && this.points.length >= 2) {
+    // Auto-stop when 100% accuracy is achieved (with small tolerance for floating point)
+    const accuracy = this.computeAccuracy();
+    if (accuracy >= 0.9999 && this.points.length >= 2) {
       this.stop();
       return;
     }
