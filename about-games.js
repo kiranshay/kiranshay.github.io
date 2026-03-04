@@ -370,9 +370,9 @@ class DecisionBoundaryGame {
     this.updateStats();
     this.render();
 
-    // Auto-stop when 100% accuracy is achieved (with small tolerance for floating point)
+    // Auto-stop at 150 epochs if 100% accuracy, otherwise keep going until 100%
     const accuracy = this.computeAccuracy();
-    if (accuracy >= 0.9999 && this.points.length >= 2) {
+    if (this.epoch >= 150 && accuracy >= 0.9999 && this.points.length >= 2) {
       this.stop();
       return;
     }
