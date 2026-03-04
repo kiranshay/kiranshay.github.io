@@ -788,10 +788,10 @@ class NeuralNetworkGame {
     ctx.font = 'bold 11px Inter, sans-serif';
     // x₁ label (slightly right of bottom-right corner)
     ctx.textAlign = 'left';
-    ctx.fillText('x₁', mapX + mapSize + 4, mapY + 18 + mapSize + 4);
+    ctx.fillText('x₁', mapX + mapSize + 6, mapY + 18 + mapSize + 2);
     // x₂ label (slightly left of top-left corner)
     ctx.textAlign = 'right';
-    ctx.fillText('x₂', mapX - 4, mapY + 18 + 4);
+    ctx.fillText('x₂', mapX - 6, mapY + 18 + 2);
   }
 
   roundRect(ctx, x, y, w, h, r) {
