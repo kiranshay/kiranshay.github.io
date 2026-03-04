@@ -96,24 +96,26 @@ class DecisionBoundaryGame {
     return x * (1 - x);
   }
 
-  relu(x) {
-    return Math.max(0, x);
+  leakyRelu(x) {
+    return x > 0 ? x : 0.01 * x;
   }
 
-  reluDerivative(x) {
-    return x > 0 ? 1 : 0;
+  leakyReluDerivative(x) {
+    return x > 0 ? 1 : 0.01;
   }
 
   forward(input) {
-    // Hidden layer with ReLU
+    // Hidden layer with Leaky ReLU (prevents dying neurons with tiny weights)
     const hiddenSize = 16;
+    this.hiddenPre = []; // Pre-activation values for backprop
     this.hidden = [];
     for (let j = 0; j < hiddenSize; j++) {
       let sum = this.b1[j];
       for (let i = 0; i < 2; i++) {
         sum += input[i] * this.w1[i][j];
       }
-      this.hidden[j] = this.relu(sum);
+      this.hiddenPre[j] = sum;
+      this.hidden[j] = this.leakyRelu(sum);
     }
 
     // Output layer with sigmoid
@@ -133,11 +135,11 @@ class DecisionBoundaryGame {
     const outputError = target - this.output;
     const outputDelta = outputError * this.sigmoidDerivative(this.output);
 
-    // Hidden error
+    // Hidden error (use pre-activation for derivative)
     const hiddenDelta = [];
     for (let j = 0; j < hiddenSize; j++) {
       const error = outputDelta * this.w2[j][0];
-      hiddenDelta[j] = error * this.reluDerivative(this.hidden[j]);
+      hiddenDelta[j] = error * this.leakyReluDerivative(this.hiddenPre[j]);
     }
 
     // Update weights
