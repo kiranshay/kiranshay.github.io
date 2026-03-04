@@ -51,11 +51,12 @@ class DecisionBoundaryGame {
   }
 
   initNetwork() {
-    // Simple 2-layer network: 2 -> 16 -> 1
-    // He initialization for ReLU networks
-    this.w1 = this.randomMatrix(2, 16);
-    this.b1 = this.zeroArray(16);
-    this.w2 = this.randomMatrix(16, 1);
+    // Simple 2-layer network: 2 -> 4 -> 1
+    // Smaller network = smoother decision boundaries
+    this.hiddenSize = 4;
+    this.w1 = this.randomMatrix(2, this.hiddenSize);
+    this.b1 = this.zeroArray(this.hiddenSize);
+    this.w2 = this.randomMatrix(this.hiddenSize, 1);
     this.b2 = this.zeroArray(1);
   }
 
@@ -106,9 +107,8 @@ class DecisionBoundaryGame {
 
   forward(input) {
     // Hidden layer with ReLU
-    const hiddenSize = 16;
     this.hidden = [];
-    for (let j = 0; j < hiddenSize; j++) {
+    for (let j = 0; j < this.hiddenSize; j++) {
       let sum = this.b1[j];
       for (let i = 0; i < 2; i++) {
         sum += input[i] * this.w1[i][j];
@@ -118,7 +118,7 @@ class DecisionBoundaryGame {
 
     // Output layer with sigmoid
     let output = this.b2[0];
-    for (let j = 0; j < hiddenSize; j++) {
+    for (let j = 0; j < this.hiddenSize; j++) {
       output += this.hidden[j] * this.w2[j][0];
     }
     this.output = this.sigmoid(output);
@@ -127,31 +127,29 @@ class DecisionBoundaryGame {
   }
 
   backward(input, target) {
-    const hiddenSize = 16;
-
     // Output error
     const outputError = target - this.output;
     const outputDelta = outputError * this.sigmoidDerivative(this.output);
 
     // Hidden error
     const hiddenDelta = [];
-    for (let j = 0; j < hiddenSize; j++) {
+    for (let j = 0; j < this.hiddenSize; j++) {
       const error = outputDelta * this.w2[j][0];
       hiddenDelta[j] = error * this.reluDerivative(this.hidden[j]);
     }
 
     // Update weights
-    for (let j = 0; j < hiddenSize; j++) {
+    for (let j = 0; j < this.hiddenSize; j++) {
       this.w2[j][0] += this.learningRate * outputDelta * this.hidden[j];
     }
     this.b2[0] += this.learningRate * outputDelta;
 
     for (let i = 0; i < 2; i++) {
-      for (let j = 0; j < hiddenSize; j++) {
+      for (let j = 0; j < this.hiddenSize; j++) {
         this.w1[i][j] += this.learningRate * hiddenDelta[j] * input[i];
       }
     }
-    for (let j = 0; j < hiddenSize; j++) {
+    for (let j = 0; j < this.hiddenSize; j++) {
       this.b1[j] += this.learningRate * hiddenDelta[j];
     }
 
