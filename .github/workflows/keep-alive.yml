@@ -1,0 +1,35 @@
+name: Keep Streamlit Apps Alive
+
+on:
+  schedule:
+    # Run every 6 hours to prevent 12-hour sleep timeout
+    - cron: '0 */6 * * *'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  ping-apps:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Streamlit Apps
+        run: |
+          APPS=(
+            "https://neuralpopulationdyna.streamlit.app"
+            "https://retinalencodingmodels.streamlit.app"
+            "https://neuralsignalclassifi.streamlit.app"
+            "https://multimodalcelltype.streamlit.app"
+            "https://synapticconnectivity.streamlit.app"
+            "https://alzheimersdiseasepro.streamlit.app"
+          )
+
+          for url in "${APPS[@]}"; do
+            echo "Pinging: $url"
+            status=$(curl -s -o /dev/null -w "%{http_code}" --max-time 30 "$url" || echo "000")
+            echo "  Status: $status"
+            if [ "$status" = "000" ]; then
+              echo "  WARNING: Failed to reach $url"
+            else
+              echo "  OK"
+            fi
+            sleep 2
+          done
+          echo "All apps pinged successfully."
