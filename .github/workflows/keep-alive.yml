@@ -2,34 +2,60 @@ name: Keep Streamlit Apps Alive
 
 on:
   schedule:
-    # Run every 6 hours to prevent 12-hour sleep timeout
-    - cron: '0 */6 * * *'
-  workflow_dispatch: # Allow manual trigger
+    - cron: '0 */4 * * *'
+  workflow_dispatch:
 
 jobs:
-  ping-apps:
+  wake-apps:
     runs-on: ubuntu-latest
     steps:
-      - name: Ping Streamlit Apps
+      - name: Install Playwright
         run: |
-          APPS=(
-            "https://neural-pop-simulator.streamlit.app"
-            "https://retinal-encoding.streamlit.app"
-            "https://neural-signal-classifier.streamlit.app"
-            "https://multi-modal-cell-type.streamlit.app"
-            "https://synaptic-connectivity.streamlit.app"
-            "https://alzheimers-modeling.streamlit.app"
-          )
+          npm init -y > /dev/null 2>&1
+          npm install playwright > /dev/null 2>&1
+          npx playwright install chromium > /dev/null 2>&1
 
-          for url in "${APPS[@]}"; do
-            echo "Pinging: $url"
-            status=$(curl -s -o /dev/null -w "%{http_code}" --max-time 30 "$url" || echo "000")
-            echo "  Status: $status"
-            if [ "$status" = "000" ]; then
-              echo "  WARNING: Failed to reach $url"
-            else
-              echo "  OK"
-            fi
-            sleep 2
-          done
-          echo "All apps pinged successfully."
+      - name: Wake Streamlit Apps
+        run: |
+          cat << 'SCRIPT' > wake.mjs
+          import { chromium } from 'playwright';
+
+          const APPS = [
+            "https://neural-pop-simulator.streamlit.app",
+            "https://retinal-encoding.streamlit.app",
+            "https://neural-signal-classifier.streamlit.app",
+            "https://multi-modal-cell-type.streamlit.app",
+            "https://synaptic-connectivity.streamlit.app",
+            "https://alzheimers-modeling.streamlit.app",
+          ];
+
+          const browser = await chromium.launch();
+
+          for (const url of APPS) {
+            console.log(`Waking: ${url}`);
+            const context = await browser.newContext();
+            const page = await context.newPage();
+            try {
+              await page.goto(url, { waitUntil: 'networkidle', timeout: 90000 });
+
+              // Check for the sleep/wake button and click it
+              const wakeButton = await page.$('button:has-text("Yes, get this app back up")');
+              if (wakeButton) {
+                console.log('  App is sleeping — clicking wake button...');
+                await wakeButton.click();
+                // Wait for the app to start loading
+                await page.waitForTimeout(30000);
+                console.log('  Wake request sent!');
+              } else {
+                console.log('  App is already awake.');
+              }
+            } catch (err) {
+              console.log(`  Error: ${err.message}`);
+            }
+            await context.close();
+          }
+
+          await browser.close();
+          console.log('Done!');
+          SCRIPT
+          node wake.mjs

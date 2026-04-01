@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Projects | Kiran Shay</title>
   <meta name="description" content="ML, simulation, and optimization projects by Kiran Shay.">
+  <meta property="og:title" content="Projects | Kiran Shay">
+  <meta property="og:description" content="ML, simulation, and optimization projects by Kiran Shay at Johns Hopkins University.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://kiranshay.github.io/projects.html">
+  <meta property="og:image" content="https://kiranshay.github.io/kiran_headshot.jpeg">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -54,11 +59,11 @@
 
     <section class="section">
       <div class="container">
-        <div class="project-filters">
-          <button class="filter-btn active" data-filter="all">All</button>
-          <button class="filter-btn" data-filter="ml">Machine Learning</button>
-          <button class="filter-btn" data-filter="neuro">Neuroscience</button>
-          <button class="filter-btn" data-filter="simulation">Simulation</button>
+        <div class="project-filters" role="group" aria-label="Filter projects by category">
+          <button class="filter-btn active" data-filter="all" aria-pressed="true">All</button>
+          <button class="filter-btn" data-filter="ml" aria-pressed="false">Machine Learning</button>
+          <button class="filter-btn" data-filter="neuro" aria-pressed="false">Neuroscience</button>
+          <button class="filter-btn" data-filter="simulation" aria-pressed="false">Simulation</button>
         </div>
 
         <div class="projects-grid">
@@ -83,7 +88,7 @@
               <span class="tag tag-neutral">Healthcare</span>
             </div>
             <div class="card-footer">
-              <a href="https://github.com/kiranshay/Parkinsons-ET" target="_blank" class="btn btn-ghost btn-sm">
+              <a href="https://github.com/kiranshay/Parkinsons-ET" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm">
                 <i data-lucide="github"></i> Code
               </a>
             </div>
@@ -135,7 +140,7 @@
               <span class="tag tag-accent">Startup</span>
             </div>
             <div class="card-footer">
-              <a href="https://www.affordabletutoringsolutions.org" target="_blank" class="btn btn-ghost btn-sm">
+              <a href="https://www.affordabletutoringsolutions.org" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm">
                 <i data-lucide="external-link"></i> Live Site
               </a>
             </div>
@@ -160,7 +165,7 @@
               <span class="tag tag-accent">Simulation</span>
             </div>
             <div class="card-footer">
-              <a href="https://covidmod.isi.jhu.edu/team" target="_blank" class="btn btn-ghost btn-sm">
+              <a href="https://covidmod.isi.jhu.edu/team" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm">
                 <i data-lucide="external-link"></i> Website
               </a>
             </div>
@@ -339,9 +344,9 @@
     <div class="container">
       <div class="footer-content">
         <div class="footer-links">
-          <a href="mailto:kiranshay123@gmail.com"><i data-lucide="mail"></i></a>
-          <a href="https://www.linkedin.com/in/kiran-shay/" target="_blank"><i data-lucide="linkedin"></i></a>
-          <a href="https://github.com/kiranshay" target="_blank"><i data-lucide="github"></i></a>
+          <a href="mailto:kiranshay123@gmail.com" aria-label="Email Kiran Shay"><i data-lucide="mail"></i></a>
+          <a href="https://www.linkedin.com/in/kiran-shay/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile"><i data-lucide="linkedin"></i></a>
+          <a href="https://github.com/kiranshay" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile"><i data-lucide="github"></i></a>
         </div>
         <p>&copy; 2026 Kiran Shay &middot; Johns Hopkins University</p>
       </div>

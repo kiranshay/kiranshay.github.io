@@ -18,24 +18,42 @@ window.addEventListener('scroll', () => {
 const navToggle = document.querySelector('.nav-toggle');
 const mobileNav = document.getElementById('mobile-nav');
 
-navToggle.addEventListener('click', () => {
-  mobileNav.classList.toggle('open');
-  const icon = navToggle.querySelector('i');
-  if (mobileNav.classList.contains('open')) {
-    icon.setAttribute('data-lucide', 'x');
-  } else {
-    icon.setAttribute('data-lucide', 'menu');
-  }
+function closeMobileNav() {
+  mobileNav.classList.remove('open');
+  navToggle.setAttribute('aria-expanded', 'false');
+  navToggle.querySelector('i').setAttribute('data-lucide', 'menu');
   lucide.createIcons();
+}
+
+function openMobileNav() {
+  mobileNav.classList.add('open');
+  navToggle.setAttribute('aria-expanded', 'true');
+  navToggle.querySelector('i').setAttribute('data-lucide', 'x');
+  lucide.createIcons();
+}
+
+navToggle.setAttribute('aria-expanded', 'false');
+navToggle.setAttribute('aria-controls', 'mobile-nav');
+
+navToggle.addEventListener('click', () => {
+  if (mobileNav.classList.contains('open')) {
+    closeMobileNav();
+  } else {
+    openMobileNav();
+  }
 });
 
 // Close mobile nav when clicking a link
 document.querySelectorAll('.mobile-nav .nav-link').forEach(link => {
-  link.addEventListener('click', () => {
-    mobileNav.classList.remove('open');
-    navToggle.querySelector('i').setAttribute('data-lucide', 'menu');
-    lucide.createIcons();
-  });
+  link.addEventListener('click', () => closeMobileNav());
+});
+
+// Close mobile nav with Escape key
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && mobileNav.classList.contains('open')) {
+    closeMobileNav();
+    navToggle.focus();
+  }
 });
 
 // Project filtering
@@ -44,23 +62,25 @@ const projectCards = document.querySelectorAll('.project-card');
 
 filterButtons.forEach(button => {
   button.addEventListener('click', () => {
-    // Update active state
-    filterButtons.forEach(btn => btn.classList.remove('active'));
+    // Update active state and aria-pressed
+    filterButtons.forEach(btn => {
+      btn.classList.remove('active');
+      btn.setAttribute('aria-pressed', 'false');
+    });
     button.classList.add('active');
+    button.setAttribute('aria-pressed', 'true');
 
     const filter = button.dataset.filter;
 
     projectCards.forEach(card => {
       if (filter === 'all') {
-        card.style.display = 'flex';
-        card.style.animation = 'fadeInUp 0.5s ease forwards';
+        card.classList.remove('card-hidden');
       } else {
         const tags = card.dataset.tags.split(' ');
         if (tags.includes(filter)) {
-          card.style.display = 'flex';
-          card.style.animation = 'fadeInUp 0.5s ease forwards';
+          card.classList.remove('card-hidden');
         } else {
-          card.style.display = 'none';
+          card.classList.add('card-hidden');
         }
       }
     });
