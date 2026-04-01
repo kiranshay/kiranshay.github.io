@@ -117,16 +117,19 @@ class NeuralNetworkGame {
     const rect = container.getBoundingClientRect();
     const dpr = window.devicePixelRatio || 1;
 
+    const isMobile = rect.width < 600;
+    const height = isMobile ? Math.min(350, window.innerHeight * 0.5) : 420;
+
     this.canvas.style.width = '100%';
-    this.canvas.style.height = '420px';
+    this.canvas.style.height = height + 'px';
 
     this.canvas.width = rect.width * dpr;
-    this.canvas.height = 420 * dpr;
+    this.canvas.height = height * dpr;
 
     this.ctx.scale(dpr, dpr);
 
     this.displayWidth = rect.width;
-    this.displayHeight = 420;
+    this.displayHeight = height;
   }
 
   initializeWeights() {
@@ -380,13 +383,14 @@ class NeuralNetworkGame {
   }
 
   getNeuronPosition(layer, neuron) {
-    const padding = 80;
-    const rightPadding = 280;
+    const isMobile = this.displayWidth < 600;
+    const padding = isMobile ? 40 : 80;
+    const rightPadding = isMobile ? 40 : 280;
     const availableWidth = this.displayWidth - padding - rightPadding;
     const layerSpacing = availableWidth / (this.layers.length - 1);
     const x = padding + layer * layerSpacing;
 
-    const neuronSpacing = 55;
+    const neuronSpacing = isMobile ? 35 : 55;
     const layerHeight = (this.layers[layer] - 1) * neuronSpacing;
     const startY = (this.displayHeight - layerHeight) / 2;
     const y = startY + neuron * neuronSpacing;
@@ -526,18 +530,20 @@ class NeuralNetworkGame {
 
     // Draw neurons
     const layerLabels = ['Input', 'Hidden', 'Output'];
+    const smallFont = this.displayWidth < 600;
     for (let layer = 0; layer < this.layers.length; layer++) {
       const firstNeuron = this.getNeuronPosition(layer, 0);
       ctx.fillStyle = '#cbd5e1';
-      ctx.font = 'bold 11px Inter, sans-serif';
+      ctx.font = smallFont ? 'bold 9px Inter, sans-serif' : 'bold 11px Inter, sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText(layerLabels[layer], firstNeuron.x, 20);
+      ctx.fillText(layerLabels[layer], firstNeuron.x, smallFont ? 14 : 20);
 
       for (let neuron = 0; neuron < this.layers[layer]; neuron++) {
         const pos = this.getNeuronPosition(layer, neuron);
         const activation = this.activations[layer][neuron];
         const isHovered = this.hoveredNeuron?.layer === layer && this.hoveredNeuron?.neuron === neuron;
-        const baseRadius = 22;
+        const isMobile = this.displayWidth < 600;
+        const baseRadius = isMobile ? 16 : 22;
         const radius = isHovered ? baseRadius + 4 : baseRadius;
 
         // Outer glow based on activation
@@ -582,34 +588,34 @@ class NeuralNetworkGame {
 
         // Activation text - always white on dark background
         ctx.fillStyle = '#ffffff';
-        ctx.font = 'bold 12px JetBrains Mono, monospace';
+        ctx.font = isMobile ? 'bold 9px JetBrains Mono, monospace' : 'bold 12px JetBrains Mono, monospace';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText(activation.toFixed(2), pos.x, pos.y);
 
         // Labels
+        const labelFont = isMobile ? 'bold 9px Inter, sans-serif' : 'bold 11px Inter, sans-serif';
         if (layer === 0) {
           ctx.fillStyle = '#cbd5e1';
-          ctx.font = 'bold 11px Inter, sans-serif';
-          // x₁ above, x₂ below
+          ctx.font = labelFont;
           if (neuron === 0) {
-            ctx.fillText('x₁', pos.x, pos.y - radius - 10);
+            ctx.fillText('x₁', pos.x, pos.y - radius - 8);
           } else {
-            ctx.fillText('x₂', pos.x, pos.y + radius + 14);
+            ctx.fillText('x₂', pos.x, pos.y + radius + 12);
           }
         } else if (layer === this.layers.length - 1) {
           ctx.fillStyle = '#cbd5e1';
-          ctx.font = 'bold 11px Inter, sans-serif';
-          ctx.fillText('ŷ', pos.x, pos.y + radius + 14);
+          ctx.font = labelFont;
+          ctx.fillText('ŷ', pos.x, pos.y + radius + 12);
         }
       }
     }
 
-    // Draw XOR truth table
-    this.drawXORTable(ctx, width, height);
-
-    // Draw interactive decision boundary
-    this.drawDecisionBoundary(ctx, width, height);
+    // Draw side panels only on wider screens
+    if (width >= 600) {
+      this.drawXORTable(ctx, width, height);
+      this.drawDecisionBoundary(ctx, width, height);
+    }
   }
 
   drawXORTable(ctx, width, height) {

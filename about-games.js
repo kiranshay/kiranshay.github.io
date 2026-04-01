@@ -40,14 +40,16 @@ class DecisionBoundaryGame {
     const rect = container.getBoundingClientRect();
     const dpr = window.devicePixelRatio || 1;
 
-    this.canvas.width = Math.min(400, rect.width - 40) * dpr;
-    this.canvas.height = 360 * dpr;
-    this.canvas.style.width = `${Math.min(400, rect.width - 40)}px`;
-    this.canvas.style.height = '360px';
+    const w = Math.min(400, rect.width - 40);
+    const h = w < 300 ? 280 : 360;
+    this.canvas.width = w * dpr;
+    this.canvas.height = h * dpr;
+    this.canvas.style.width = `${w}px`;
+    this.canvas.style.height = `${h}px`;
     this.ctx.scale(dpr, dpr);
 
-    this.width = Math.min(400, rect.width - 40);
-    this.height = 360;
+    this.width = w;
+    this.height = h;
   }
 
   initNetwork(hiddenSize = 4) {
@@ -501,14 +503,16 @@ class MonteCarloPiGame {
     const rect = container.getBoundingClientRect();
     const dpr = window.devicePixelRatio || 1;
 
-    this.canvas.width = Math.min(400, rect.width - 40) * dpr;
-    this.canvas.height = 360 * dpr;
-    this.canvas.style.width = `${Math.min(400, rect.width - 40)}px`;
-    this.canvas.style.height = '360px';
+    const w = Math.min(400, rect.width - 40);
+    const h = w < 300 ? 280 : 360;
+    this.canvas.width = w * dpr;
+    this.canvas.height = h * dpr;
+    this.canvas.style.width = `${w}px`;
+    this.canvas.style.height = `${h}px`;
     this.ctx.scale(dpr, dpr);
 
-    this.width = Math.min(400, rect.width - 40);
-    this.height = 360;
+    this.width = w;
+    this.height = h;
   }
 
   reset() {
