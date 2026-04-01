@@ -2122,6 +2122,11 @@ img {
    =================================== */
 
 @media (max-width: 768px) {
+  .game-container {
+    padding: var(--spacing-4);
+    border-radius: 12px;
+  }
+
   .game-controls {
     flex-direction: column;
     align-items: stretch;
@@ -2129,19 +2134,36 @@ img {
 
   .game-info {
     justify-content: center;
+    flex-wrap: wrap;
+    gap: var(--spacing-2);
   }
 
   .game-buttons {
     justify-content: center;
+    flex-wrap: wrap;
   }
 
   .game-stat {
-    min-width: 70px;
-    padding: var(--spacing-2) var(--spacing-3);
+    min-width: 60px;
+    padding: var(--spacing-2);
+  }
+
+  .stat-label {
+    font-size: 0.65rem;
   }
 
   .stat-value {
-    font-size: var(--font-size-lg);
+    font-size: var(--font-size-base);
+  }
+
+  .game-buttons .btn {
+    padding: var(--spacing-2) var(--spacing-3);
+    font-size: var(--font-size-sm);
+  }
+
+  .problem-select {
+    font-size: var(--font-size-sm);
+    padding: var(--spacing-1) var(--spacing-2);
   }
 
   .about-grid {
