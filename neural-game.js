@@ -117,19 +117,23 @@ class NeuralNetworkGame {
     const rect = container.getBoundingClientRect();
     const dpr = window.devicePixelRatio || 1;
 
-    const isMobile = rect.width < 600;
-    const height = isMobile ? Math.min(350, window.innerHeight * 0.5) : 420;
+    this.isMobile = rect.width < 600;
+    // On mobile, add extra height below the network for the panels
+    const networkHeight = this.isMobile ? 280 : 420;
+    const panelHeight = this.isMobile ? 220 : 0;
+    const totalHeight = networkHeight + panelHeight;
 
     this.canvas.style.width = '100%';
-    this.canvas.style.height = height + 'px';
+    this.canvas.style.height = totalHeight + 'px';
 
     this.canvas.width = rect.width * dpr;
-    this.canvas.height = height * dpr;
+    this.canvas.height = totalHeight * dpr;
 
     this.ctx.scale(dpr, dpr);
 
     this.displayWidth = rect.width;
-    this.displayHeight = height;
+    this.displayHeight = networkHeight;
+    this.totalCanvasHeight = totalHeight;
   }
 
   initializeWeights() {
@@ -611,8 +615,11 @@ class NeuralNetworkGame {
       }
     }
 
-    // Draw side panels only on wider screens
-    if (width >= 600) {
+    if (this.isMobile) {
+      // Draw panels side-by-side below the network
+      this.drawXORTableMobile(ctx, width, height);
+      this.drawDecisionBoundaryMobile(ctx, width, height);
+    } else {
       this.drawXORTable(ctx, width, height);
       this.drawDecisionBoundary(ctx, width, height);
     }
@@ -798,6 +805,136 @@ class NeuralNetworkGame {
     // x₂ label (slightly left of top-left corner)
     ctx.textAlign = 'right';
     ctx.fillText('x₂', mapX - 8, mapY + 18);
+  }
+
+  drawXORTableMobile(ctx, width, networkHeight) {
+    const panelW = width / 2 - 12;
+    const tableX = 8;
+    const tableY = networkHeight + 15;
+    const cellW = Math.floor(panelW / 5);
+    const cellH = 28;
+
+    // Panel background
+    ctx.fillStyle = 'rgba(15, 23, 42, 0.95)';
+    this.roundRect(ctx, tableX, tableY - 20, panelW, 190, 10);
+    ctx.fill();
+    ctx.strokeStyle = '#334155';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    // Title
+    ctx.fillStyle = '#f8fafc';
+    ctx.font = 'bold 11px Inter, sans-serif';
+    ctx.textAlign = 'center';
+    const problemName = this.problems[this.currentProblem].name;
+    ctx.fillText(problemName + ' Truth Table', tableX + panelW / 2, tableY - 2);
+
+    // Headers
+    ctx.fillStyle = '#e2e8f0';
+    ctx.font = 'bold 10px Inter, sans-serif';
+    const headers = ['x₁', 'x₂', 'Tgt', 'Pred', ''];
+    headers.forEach((h, i) => {
+      ctx.fillText(h, tableX + 12 + i * cellW, tableY + 18);
+    });
+
+    // Data rows
+    this.trainingData.forEach((data, row) => {
+      const y = tableY + 35 + row * cellH;
+      const pred = this.predictions[row];
+      const correct = (pred > 0.5 && data.target === 1) || (pred <= 0.5 && data.target === 0);
+
+      ctx.fillStyle = correct ? 'rgba(34, 197, 94, 0.15)' : 'rgba(239, 68, 68, 0.1)';
+      this.roundRect(ctx, tableX + 4, y - 10, panelW - 8, cellH - 2, 4);
+      ctx.fill();
+
+      ctx.fillStyle = '#e2e8f0';
+      ctx.font = '11px JetBrains Mono, monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText(data.input[0].toString(), tableX + 12, y + 4);
+      ctx.fillText(data.input[1].toString(), tableX + 12 + cellW, y + 4);
+
+      ctx.fillStyle = data.target === 1 ? '#4ade80' : '#f87171';
+      ctx.fillText(data.target.toString(), tableX + 12 + cellW * 2, y + 4);
+
+      ctx.fillStyle = correct ? '#4ade80' : '#f87171';
+      ctx.fillText(pred.toFixed(2), tableX + 12 + cellW * 3, y + 4);
+
+      ctx.font = 'bold 12px sans-serif';
+      ctx.fillText(correct ? '✓' : '✗', tableX + 12 + cellW * 4, y + 4);
+    });
+  }
+
+  drawDecisionBoundaryMobile(ctx, width, networkHeight) {
+    const panelW = width / 2 - 12;
+    const panelX = width / 2 + 4;
+    const panelY = networkHeight + 15;
+    const mapSize = Math.min(panelW - 40, 130);
+    const resolution = 20;
+    const cellSize = mapSize / resolution;
+    const mapX = panelX + (panelW - mapSize) / 2;
+    const mapY = panelY + 20;
+
+    // Panel background
+    ctx.fillStyle = 'rgba(15, 23, 42, 0.95)';
+    this.roundRect(ctx, panelX, panelY - 20, panelW, 190, 10);
+    ctx.fill();
+    ctx.strokeStyle = '#334155';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    // Title
+    ctx.fillStyle = '#f8fafc';
+    ctx.font = 'bold 11px Inter, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Decision Boundary', panelX + panelW / 2, panelY - 2);
+
+    // Heatmap
+    for (let i = 0; i < resolution; i++) {
+      for (let j = 0; j < resolution; j++) {
+        const x1 = i / (resolution - 1);
+        const x2 = j / (resolution - 1);
+        const pred = this.forward([x1, x2]);
+
+        const r = Math.floor(248 - pred * 214);
+        const g = Math.floor(113 + pred * 109);
+        const b = Math.floor(113 - pred * 79);
+
+        ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+        ctx.fillRect(
+          mapX + i * cellSize,
+          mapY + (resolution - 1 - j) * cellSize,
+          cellSize + 0.5,
+          cellSize + 0.5
+        );
+      }
+    }
+
+    // Border
+    ctx.strokeStyle = '#475569';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(mapX, mapY, mapSize, mapSize);
+
+    // Training points
+    this.trainingData.forEach(data => {
+      const px = mapX + data.input[0] * mapSize;
+      const py = mapY + (1 - data.input[1]) * mapSize;
+
+      ctx.beginPath();
+      ctx.arc(px, py, 5, 0, Math.PI * 2);
+      ctx.fillStyle = data.target === 1 ? '#22c55e' : '#ef4444';
+      ctx.fill();
+      ctx.strokeStyle = '#fff';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+    });
+
+    // Axis labels
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '9px Inter, sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText('x₁', mapX + mapSize + 4, mapY + mapSize);
+    ctx.textAlign = 'right';
+    ctx.fillText('x₂', mapX - 4, mapY + 6);
   }
 
   roundRect(ctx, x, y, w, h, r) {
