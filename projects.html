@@ -104,15 +104,17 @@
             </div>
             <h3 class="card-title">NeuroScan: Brain Tumor MRI Classifier</h3>
             <p class="card-description">
-              Full-stack web app for classifying brain MRI scans across 8 tumor categories with
-              hierarchical glioma subtype analysis and Grad-CAM heatmap visualization. Two-stage
-              EfficientNet-B0 pipeline trained on 15,000+ clinical images at 95.5% accuracy.
+              Two-stage EfficientNet-B0 classifier for 8 tumor categories + glioma subtype analysis
+              with Grad-CAM visualization. Includes a methodological audit quantifying evaluation
+              contamination: patient-level leakage inflates benchmarks by +2.5 pp overall and +11.6 pp
+              for specific classes. Clean rebuild with patient-aware splits achieves 96.4% on 4 trustworthy classes.
+              Paper in progress: <em>Quantifying Evaluation Contamination in Brain Tumor MRI Classification Benchmarks</em>.
             </p>
             <div class="tag-group">
               <span class="tag tag-primary">PyTorch</span>
-              <span class="tag tag-secondary">Transfer Learning</span>
+              <span class="tag tag-secondary">Evaluation Methodology</span>
               <span class="tag tag-accent">FastAPI</span>
-              <span class="tag tag-neutral">Supabase</span>
+              <span class="tag tag-neutral">Research</span>
             </div>
             <div class="card-footer">
               <a href="https://kiranshay.github.io/brain-tumor-classifier" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm">
