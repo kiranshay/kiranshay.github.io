@@ -239,8 +239,9 @@
             </div>
             <h3 class="card-title">Neural Population Dynamics Simulator</h3>
             <p class="card-description">
-              Monte Carlo simulation of stochastic firing patterns in neural populations using the Gillespie algorithm.
-              Models synaptic noise, refractory periods, correlated variability, and emergent network dynamics.
+              Exact stochastic simulation of neural populations using the Gillespie algorithm.
+              Models refractory periods, correlated variability via Cholesky decomposition, and network coupling.
+              Includes parameter presets, Fano factor / CV statistics, and CSV data export.
             </p>
             <div class="tag-group">
               <span class="tag tag-primary">Monte Carlo</span>
@@ -268,7 +269,9 @@
             </div>
             <h3 class="card-title">Retinal Ganglion Cell Encoding Models</h3>
             <p class="card-description">
-              Build encoding models to predict how retinal neurons respond to visual stimuli and quantify visual information transmission.
+              LN and GLM encoding models predicting retinal neuron responses to visual stimuli.
+              Features spike-triggered average estimation, model comparison metrics (AIC, log-likelihood),
+              tuning curves, and data export for spike trains and model parameters.
             </p>
             <div class="tag-group">
               <span class="tag tag-primary">Encoding Models</span>
@@ -295,10 +298,12 @@
             </div>
             <h3 class="card-title">Neural Signal Classification for Motor Intent</h3>
             <p class="card-description">
-              Deep learning pipeline to classify neural signals and predict motor intent from ECoG data for brain-computer interfaces.
+              Signal processing and ML pipeline classifying motor intent from synthetic ECoG data.
+              Extracts frequency-band features (beta desynchronization, gamma activation) and trains
+              a Random Forest classifier with calibrated probabilities across 4 movement classes.
             </p>
             <div class="tag-group">
-              <span class="tag tag-primary">Deep Learning</span>
+              <span class="tag tag-primary">scikit-learn</span>
               <span class="tag tag-secondary">BCI</span>
               <span class="tag tag-accent">Signal Processing</span>
             </div>
@@ -322,11 +327,13 @@
             </div>
             <h3 class="card-title">Multi-Modal Cell Type Classifier</h3>
             <p class="card-description">
-              Unified model classifying neuron types by fusing electrophysiology, morphology, and transcriptomics data.
+              Late-fusion classifier for neuron types using electrophysiology, morphology, and transcriptomics.
+              Per-modality GradientBoosting classifiers feed a meta-classifier with modality dropout augmentation,
+              achieving 90% fusion accuracy across 11 cell types.
             </p>
             <div class="tag-group">
-              <span class="tag tag-primary">Multi-Modal</span>
-              <span class="tag tag-secondary">Deep Learning</span>
+              <span class="tag tag-primary">Multi-Modal Fusion</span>
+              <span class="tag tag-secondary">scikit-learn</span>
               <span class="tag tag-accent">Neuroscience</span>
             </div>
             <div class="card-footer">
@@ -347,14 +354,16 @@
             <div class="card-header">
               <span class="project-status status-planned">Demo</span>
             </div>
-            <h3 class="card-title">Synaptic Connectivity Prediction with GNNs</h3>
+            <h3 class="card-title">Synaptic Connectivity Prediction</h3>
             <p class="card-description">
-              Predict neural connections from 3D morphology using Graph Neural Networks.
+              Predicts neural connections from 3D morphology and cell-type features using gradient boosting
+              on pairwise neuron features. Trained on synthetic connectome data following published cortical
+              wiring rules, achieving 82% AUC on held-out networks.
             </p>
             <div class="tag-group">
-              <span class="tag tag-primary">Graph Neural Networks</span>
-              <span class="tag tag-secondary">Connectomics</span>
-              <span class="tag tag-accent">PyTorch Geometric</span>
+              <span class="tag tag-primary">Connectomics</span>
+              <span class="tag tag-secondary">scikit-learn</span>
+              <span class="tag tag-accent">Neuroscience</span>
             </div>
             <div class="card-footer">
               <a href="https://github.com/kiranshay/synaptic-connectivity-prediction-with" target="_blank" rel="noopener" class="btn btn-ghost btn-sm">
@@ -376,12 +385,13 @@
             </div>
             <h3 class="card-title">Alzheimer's Disease Progression Modeling</h3>
             <p class="card-description">
-              Deep learning system for predicting Alzheimer's progression using longitudinal MRI scans.
-              3D CNN-LSTM architecture captures spatial and temporal patterns for early intervention.
+              Predicts Alzheimer's progression from clinical features (MMSE, hippocampal volume, APOE4,
+              biomarkers) using gradient boosting for risk stratification and trajectory regression.
+              Trained on ADNI-matched synthetic data with realistic biomarker correlations.
             </p>
             <div class="tag-group">
-              <span class="tag tag-primary">3D CNN-LSTM</span>
-              <span class="tag tag-secondary">Neuroimaging</span>
+              <span class="tag tag-primary">Clinical ML</span>
+              <span class="tag tag-secondary">Biomarkers</span>
               <span class="tag tag-accent">Healthcare ML</span>
             </div>
             <div class="card-footer">
